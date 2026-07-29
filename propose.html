@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Under Construction</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#1e3c72,#2a5298);
+    overflow:hidden;
+    color:white;
+}
+
+.container{
+    text-align:center;
+    padding:40px;
+    max-width:650px;
+}
+
+h1{
+    font-size:3rem;
+    margin:20px 0;
+}
+
+p{
+    font-size:1.1rem;
+    color:#e5e5e5;
+    line-height:1.7;
+}
+
+.icon{
+    font-size:80px;
+    animation:bounce 2s infinite;
+}
+
+.loader{
+    width:260px;
+    height:8px;
+    background:rgba(255,255,255,0.2);
+    border-radius:20px;
+    margin:35px auto;
+    overflow:hidden;
+}
+
+.loader span{
+    display:block;
+    height:100%;
+    width:40%;
+    background:#fff;
+    border-radius:20px;
+    animation:loading 2s infinite;
+}
+
+@keyframes loading{
+    0%{transform:translateX(-100%);}
+    100%{transform:translateX(400%);}
+}
+
+@keyframes bounce{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-12px);}
+}
+
+footer{
+    margin-top:25px;
+    font-size:14px;
+    color:#ddd;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="icon">🚧</div>
+
+    <h1>Website Under Construction</h1>
+    <h2>Hehe hadana gaman thiyenne suduuuuu.........</h2>
+
+    <p>
+        We're currently working hard to build something amazing.
+        Our website will be available soon.
+        Thank you for your patience!
+    </p>
+
+    <div class="loader">
+        <span></span>
+    </div>
+
+    <footer>
+        © 2026 Oshadha Bandara
+    </footer>
+
+</div>
+
+</body>
+</html>
