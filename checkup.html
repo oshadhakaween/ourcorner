@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Poddi Check-Up Ekak 🌸</title>
+  
+  <!-- Premium Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Outfit:wght@300;400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Phosphor Icons for Premium UI -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <style>
+    /* =========================================
+       1. CSS RESET & VARIABLES
+       ========================================= */
+    :root {
+      --glass-bg: rgba(255, 255, 255, 0.55);
+      --glass-border: rgba(255, 255, 255, 0.8);
+      --glass-shadow: rgba(142, 115, 175, 0.15);
+      
+      --text-main: #3b3149;
+      --text-soft: #6d627a;
+      
+      --accent-primary: #a78bfa;   
+      --accent-secondary: #f472b6; 
+      --accent-tertiary: #34d399;  
+      
+      --btn-hover-bg: rgba(255, 255, 255, 0.9);
+      
+      --ticket-bg: rgba(253, 251, 255, 0.92);
+      --ticket-border: rgba(167, 139, 250, 0.4);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body, html {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      font-family: 'Outfit', sans-serif;
+      background-color: #f3f0f8;
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* =========================================
+       2. FLUID AMBIENT BACKGROUND & CANVAS
+       ========================================= */
+    #ambient-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .bg-blobs {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: -1;
+      overflow: hidden;
+      filter: blur(90px);
+      opacity: 0.85;
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      animation: float-blob 25s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .blob-1 {
+      width: 55vw; height: 55vw;
+      background: radial-gradient(circle, #e8d5ff, transparent 70%);
+      top: -15%; left: -10%;
+      animation-delay: 0s;
+    }
+
+    .blob-2 {
+      width: 65vw; height: 65vw;
+      background: radial-gradient(circle, #bbf7d0, transparent 70%);
+      bottom: -20%; right: -15%;
+      animation-delay: -7s;
+    }
+
+    .blob-3 {
+      width: 50vw; height: 50vw;
+      background: radial-gradient(circle, #fbcfe8, transparent 70%);
+      top: 20%; left: 35%;
+      animation-delay: -12s;
+    }
+
+    @keyframes float-blob {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(6%, 12%) scale(1.15); }
+      100% { transform: translate(-6%, -6%) scale(0.9); }
+    }
+
+    /* =========================================
+       3. MAIN GLASS APP CONTAINER
+       ========================================= */
+    .app-wrapper {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%; height: 100%;
+      padding: 20px;
+    }
+
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(25px) saturate(160%);
+      -webkit-backdrop-filter: blur(25px) saturate(160%);
+      border: 1.5px solid var(--glass-border);
+      border-radius: 36px;
+      box-shadow: 0 24px 48px -12px var(--glass-shadow), 
+                  inset 0 1px 0 rgba(255,255,255,0.9), 
+                  0 0 40px rgba(167, 139, 250, 0.1);
+      width: 100%;
+      max-width: 460px;
+      padding: 40px 32px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      animation: gentlePulse 6s infinite alternate;
+    }
+
+    @keyframes gentlePulse {
+      to { box-shadow: 0 24px 50px -10px var(--glass-shadow), inset 0 1px 0 rgba(255,255,255,0.9), 0 0 60px rgba(167, 139, 250, 0.25); }
+    }
+
+    /* =========================================
+       4. STAGE MANAGEMENT & ANIMATIONS
+       ========================================= */
+    .stage {
+      width: 100%;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .stage.active {
+      display: flex;
+      animation: stageEnter 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .stage.fade-out {
+      animation: stageExit 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes stageEnter {
+      from { opacity: 0; transform: translateY(20px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes stageExit {
+      from { opacity: 1; transform: translateY(0) scale(1); }
+      to { opacity: 0; transform: translateY(-20px) scale(0.98); }
+    }
+
+    /* =========================================
+       5. TYPOGRAPHY & TEXT EFFECTS
+       ========================================= */
+    .headline {
+      font-family: 'Quicksand', sans-serif;
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.35;
+      min-height: 60px; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      letter-spacing: -0.5px;
+    }
+
+    .subtext {
+      font-size: 1.05rem;
+      color: var(--text-soft);
+      line-height: 1.6;
+      font-weight: 400;
+    }
+
+    .typing-cursor::after {
+      content: '';
+      display: inline-block;
+      width: 3px;
+      height: 1.2em;
+      background-color: var(--accent-primary);
+      vertical-align: middle;
+      margin-left: 4px;
+      animation: blink 0.8s infinite;
+      border-radius: 2px;
+    }
+
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+    /* =========================================
+       6. SCANNER UI 
+       ========================================= */
+    .scanner-ring {
+      position: relative;
+      width: 120px; height: 120px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .ring-bg {
+      position: absolute;
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      border: 3px dashed rgba(167, 139, 250, 0.4);
+      animation: spin 12s linear infinite;
+    }
+
+    .ring-fill {
+      position: absolute;
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      border: 3.5px solid transparent;
+      border-top-color: var(--accent-primary);
+      border-right-color: var(--accent-secondary);
+      animation: spin 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+
+    .scanner-icon {
+      font-size: 3.2rem;
+      color: var(--accent-primary);
+      filter: drop-shadow(0 0 12px rgba(167, 139, 250, 0.6));
+      animation: float-icon 3s ease-in-out infinite;
+    }
+
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    @keyframes float-icon {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-6px) scale(1.05); }
+    }
+
+    .progress-track {
+      width: 100%; height: 8px;
+      background: rgba(255,255,255,0.6);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+      margin-top: 10px;
+    }
+
+    .progress-fill {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, var(--accent-secondary), var(--accent-primary));
+      border-radius: 20px;
+      transition: width 0.1s linear;
+    }
+
+    /* =========================================
+       7. BUTTONS & CONTROLS
+       ========================================= */
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-primary), #c084fc);
+      color: white;
+      border: none;
+      padding: 16px 36px;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      font-family: 'Quicksand', sans-serif;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(167, 139, 250, 0.35);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 15px 35px rgba(167, 139, 250, 0.45);
+    }
+
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.5);
+      border: 2px solid rgba(167, 139, 250, 0.5);
+      color: var(--accent-primary);
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: 'Quicksand', sans-serif;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 15px;
+      backdrop-filter: blur(5px);
+    }
+
+    .btn-outline:hover {
+      background: rgba(167, 139, 250, 0.1);
+      border-color: var(--accent-primary);
+      transform: translateY(-2px);
+    }
+
+    .options-container { width: 100%; display: flex; flex-direction: column; gap: 12px; }
+
+    .option-card {
+      background: rgba(255, 255, 255, 0.7);
+      border: 1.5px solid rgba(255, 255, 255, 0.9);
+      padding: 16px 20px;
+      border-radius: 20px;
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateX(-10px);
+      animation: slideInOpt 0.4s forwards;
+    }
+
+    @keyframes slideInOpt { to { opacity: 1; transform: translateX(0); } }
+
+    .option-card:hover {
+      background: var(--btn-hover-bg);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+    }
+
+    .option-card.selected {
+      background: #fdfcff;
+      border-color: var(--accent-primary);
+      box-shadow: 0 10px 25px rgba(167, 139, 250, 0.15);
+      transform: scale(1.02);
+    }
+
+    .option-icon { font-size: 1.4rem; }
+
+    .btn-next {
+      background: #fff;
+      color: var(--accent-primary);
+      border: 1px solid rgba(167, 139, 250, 0.2);
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      display: flex; justify-content: center; align-items: center;
+      font-size: 1.6rem;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+      opacity: 0; pointer-events: none;
+      transform: scale(0.8);
+    }
+
+    .btn-next.ready {
+      opacity: 1; pointer-events: auto;
+      transform: scale(1);
+      animation: pulse-btn 2s infinite;
+    }
+
+    @keyframes pulse-btn {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(167, 139, 250, 0.4); }
+      70% { box-shadow: 0 0 0 15px rgba(167, 139, 250, 0); }
+    }
+
+    /* =========================================
+       8. TRICK STAGE (EVASION LOGIC)
+       ========================================= */
+    .trick-buttons {
+      position: relative;
+      width: 100%; height: 130px;
+      display: flex; justify-content: center; align-items: center;
+      gap: 15px;
+    }
+
+    .btn-yes {
+      background: linear-gradient(135deg, var(--accent-secondary), #fb7185);
+      color: white; border: none;
+      padding: 16px 42px; border-radius: 50px;
+      font-size: 1.25rem; font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(244, 114, 182, 0.4);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 10;
+    }
+
+    .btn-no {
+      background: rgba(255, 255, 255, 0.7);
+      color: var(--text-soft);
+      border: 1.5px solid rgba(0,0,0,0.08);
+      padding: 15px 30px; border-radius: 50px;
+      font-size: 1rem; font-weight: 600;
+      cursor: pointer;
+      position: absolute; 
+      transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      z-index: 20;
+    }
+
+    /* =========================================
+       9. 3D PRESCRIPTION TICKET
+       ========================================= */
+    .scene { width: 100%; perspective: 1000px; }
+
+    .rx-ticket {
+      background: var(--ticket-bg);
+      backdrop-filter: blur(12px);
+      border: 1.5px solid var(--ticket-border);
+      border-radius: 18px;
+      padding: 28px; width: 100%;
+      position: relative;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.08), inset 0 0 0 1px rgba(255,255,255,0.9);
+      opacity: 0; transform-style: preserve-3d;
+      transform: rotateY(90deg) translateZ(100px);
+      animation: flipIn 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.1) forwards;
+      transition: transform 0.3s ease;
+    }
+
+    .rx-ticket:hover { transform: translateY(-5px) rotateX(2deg); }
+
+    @keyframes flipIn { to { opacity: 1; transform: rotateY(0deg) translateZ(0); } }
+
+    .rx-ticket::before, .rx-ticket::after {
+      content: ''; position: absolute;
+      width: 24px; height: 24px;
+      background: var(--glass-bg);
+      border-radius: 50%; top: 70px;
+      box-shadow: inset 1px 0 3px rgba(0,0,0,0.05);
+    }
+    .rx-ticket::before { left: -13px; border-right: 1.5px solid var(--ticket-border); }
+    .rx-ticket::after { right: -13px; border-left: 1.5px solid var(--ticket-border); }
+
+    .rx-header {
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 2px dashed rgba(167, 139, 250, 0.3);
+      padding-bottom: 16px; margin-bottom: 20px;
+    }
+
+    .rx-title-group { text-align: left; }
+    .rx-brand { font-size: 0.95rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-primary); font-weight: 700; }
+    .rx-sub { font-size: 0.75rem; color: var(--text-soft); }
+    .rx-logo { font-size: 2.8rem; color: var(--accent-secondary); font-family: 'Dancing Script', cursive; line-height: 1; }
+
+    .rx-body { text-align: left; }
+    
+    .rx-diagnosis {
+      background: rgba(167, 139, 250, 0.12);
+      padding: 10px 14px; border-radius: 8px;
+      font-size: 0.95rem; color: var(--accent-primary);
+      font-weight: 600; margin-bottom: 20px;
+      display: inline-block;
+    }
+
+    .script-text {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.7rem; color: #2b2521;
+      line-height: 1.5; margin-bottom: 8px;
+      opacity: 0; transform: translateY(10px);
+      animation: inkFade 0.6s ease forwards;
+    }
+
+    @keyframes inkFade { to { opacity: 1; transform: translateY(0); } }
+
+    .rx-footer {
+      margin-top: 24px; padding-top: 16px;
+      border-top: 1px solid rgba(0,0,0,0.05);
+      display: flex; flex-direction: column; align-items: flex-end;
+    }
+
+    .rx-sig { font-family: 'Dancing Script', cursive; font-size: 2.4rem; color: var(--accent-primary); transform: rotate(-4deg); }
+    .rx-doc { font-size: 0.75rem; color: var(--text-soft); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+
+    #confetti-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 100; }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Fluid Canvas -->
+  <div class="bg-blobs">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+  <canvas id="ambient-canvas"></canvas>
+  <canvas id="confetti-canvas"></canvas>
+
+  <div class="app-wrapper">
+    <div class="glass-card" id="appCard">
+      
+      <!-- STAGE 0: LOADING -->
+      <div class="stage active" id="stage-0">
+        <div class="scanner-ring" id="scan-ui">
+          <div class="ring-bg"></div>
+          <div class="ring-fill"></div>
+          <i class="ph ph-heartbeat scanner-icon"></i>
+        </div>
+        
+        <div class="headline" id="title-0"></div>
+        
+        <div class="progress-track" id="scan-track" style="display: none; width: 80%;">
+          <div class="progress-fill" id="scan-fill"></div>
+        </div>
+
+        <p class="subtext" id="sub-0" style="opacity: 0; transition: opacity 0.8s;">
+          Sensors kiyanawa oyage hithe godak dewal thiyenawa kiyala. Poddak relax wenna api check-up ekak karala balamu. 🌿
+        </p>
+
+        <button class="btn-primary" id="btn-start" style="opacity: 0; display: none;" onclick="goToStage(1)">
+          Patan Gamu <i class="ph ph-arrow-right"></i>
+        </button>
+      </div>
+
+      <!-- STAGE 1: QUESTIONNAIRE (Singlish) -->
+      <div class="stage" id="stage-1">
+        <div class="progress-track" style="margin-bottom: 20px;">
+          <div class="progress-fill" id="quiz-progress" style="width: 33%;"></div>
+        </div>
+
+        <div class="headline" id="quiz-question"></div>
+        
+        <div class="options-container" id="quiz-options"></div>
+
+        <button class="btn-next" id="btn-next" onclick="nextQuestion()">
+          <i class="ph ph-caret-right"></i>
+        </button>
+      </div>
+
+      <!-- STAGE 2: THE TRICK -->
+      <div class="stage" id="stage-2">
+        <i class="ph-fill ph-sparkle" style="font-size: 3.5rem; color: var(--accent-secondary); margin-bottom: -15px;"></i>
+        <div class="headline" style="min-height: auto;">Diagnostic Complete</div>
+        <p class="subtext">Official care plan eka hadanna kalin, mekata uththarayak denna:</p>
+        
+        <h2 style="color: var(--accent-primary); font-family: 'Quicksand', sans-serif; font-size: 1.7rem; font-weight: 700; margin: 15px 0;">Mawath godaaak adareida? 🥺</h2>
+
+        <div class="trick-buttons" id="trick-container">
+          <button class="btn-yes" id="btn-yes" onclick="goToStage(3)">Ow! 💕</button>
+          <button class="btn-no" id="btn-no">Naha 😜</button>
+        </div>
+      </div>
+
+      <!-- STAGE 3: RX TICKET -->
+      <div class="stage" id="stage-3">
+        <div class="scene">
+          <div class="rx-ticket">
+            <div class="rx-header">
+              <div class="rx-title-group">
+                <div class="rx-brand">Clinic Love 🏥</div>
+                <div class="rx-sub">Care Prescription #001</div>
+              </div>
+              <div class="rx-logo">OC</div>
+            </div>
+
+            <div class="rx-body">
+              <div class="rx-diagnosis">Diagnosis: Hodatama Mahansiy / Cute wadiy</div>
+              
+              <div class="script-text" style="animation-delay: 0.8s;">• Prescribed: Godaaak warm hugs</div>
+              <div class="script-text" style="animation-delay: 1.6s;">• Refill: Nidimatha wenakan cuddles</div>
+              <div class="script-text" style="animation-delay: 2.4s;">• Note: Stress eka adu wenakan athin allan inna.</div>
+            </div>
+
+            <div class="rx-footer script-text" style="animation-delay: 3.2s;">
+              <div class="rx-sig">Yours Loving, OB</div>
+              <div class="rx-doc">Oyage Heart Specialist</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Back Button Added Here -->
+        <button class="btn-outline" style="animation: inkFade 0.6s ease forwards; animation-delay: 4s; opacity: 0;" onclick="resetApp()">
+          Ayeth Mulata Yanna <i class="ph ph-arrow-counter-clockwise"></i>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    /* 1. AMBIENT BACKGROUND */
+    const ambientCanvas = document.getElementById('ambient-canvas');
+    const ctxA = ambientCanvas.getContext('2d');
+    let width, height;
+    let particles = [];
+
+    function initAmbient() {
+      width = ambientCanvas.width = window.innerWidth;
+      height = ambientCanvas.height = window.innerHeight;
+      particles = [];
+      for (let i = 0; i < 35; i++) {
+        particles.push({
+          x: Math.random() * width, y: Math.random() * height,
+          r: Math.random() * 3 + 1,
+          dx: (Math.random() - 0.5) * 0.4, dy: (Math.random() - 0.5) * 0.4,
+          alpha: Math.random() * 0.5 + 0.1
+        });
+      }
+    }
+
+    function drawAmbient() {
+      ctxA.clearRect(0, 0, width, height);
+      particles.forEach(p => {
+        ctxA.beginPath();
+        ctxA.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctxA.fillStyle = `rgba(255, 255, 255, ${p.alpha})`;
+        ctxA.fill();
+        p.x += p.dx; p.y += p.dy;
+        if (p.x < 0 || p.x > width) p.dx *= -1;
+        if (p.y < 0 || p.y > height) p.dy *= -1;
+      });
+      requestAnimationFrame(drawAmbient);
+    }
+    window.addEventListener('resize', initAmbient);
+    initAmbient(); drawAmbient();
+
+    /* 2. TYPEWRITER */
+    function typeWriter(text, element, speed = 35, callback) {
+      element.innerHTML = "";
+      element.classList.add('typing-cursor');
+      let i = 0;
+      const timer = setInterval(() => {
+        element.innerHTML += text.charAt(i);
+        i++;
+        if (i >= text.length) {
+          clearInterval(timer);
+          setTimeout(() => {
+            element.classList.remove('typing-cursor');
+            if (callback) callback();
+          }, 300);
+        }
+      }, speed);
+    }
+
+    /* 3. QUIZ DATA (Singlish) */
+    const quizData = [
+      {
+        q: "Mulimma, oyata dan oyata kohomada?",
+        options: [
+          { text: "Relax eke innawa", icon: "ph-cloud-moon" },
+          { text: "Tikak stress wage", icon: "ph-waves" },
+          { text: "Mokakhari aduwak danenawa", icon: "ph-star" }
+        ]
+      },
+      {
+        q: "Oyage energy level eka kohomada dan?",
+        options: [
+          { text: "Ona deyak karanna ready!", icon: "ph-battery-full" },
+          { text: "Rasne kukku ekak bonna one", icon: "ph-coffee" },
+          { text: "Nida ganna thibba nam hodai", icon: "ph-bed" }
+        ]
+      },
+      {
+        q: "Me wele labenawa nam gudakma asama de mokakda?",
+        options: [
+          { text: "Nidahas wela inna", icon: "ph-wind" },
+          { text: "Rasa kema ekak", icon: "ph-cookie" },
+          { text: "Godaaak loku hug ekak", icon: "ph-hands-clapping" }
+        ]
+      }
+    ];
+
+    let currentQ = 0;
+    let selectedAns = null;
+
+    function renderQuestion(index) {
+      const data = quizData[index];
+      const titleElem = document.getElementById('quiz-question');
+      const optionsContainer = document.getElementById('quiz-options');
+      const nextBtn = document.getElementById('btn-next');
+      const progress = document.getElementById('quiz-progress');
+      
+      progress.style.width = `${((index + 1) / quizData.length) * 100}%`;
+      optionsContainer.innerHTML = '';
+      nextBtn.classList.remove('ready');
+      selectedAns = null;
+
+      typeWriter(data.q, titleElem, 30, () => {
+        data.options.forEach((opt, i) => {
+          const div = document.createElement('div');
+          div.className = 'option-card';
+          div.style.animationDelay = `${i * 0.1}s`;
+          div.innerHTML = `<span>${opt.text}</span><i class="ph ${opt.icon} option-icon"></i>`;
+          div.onclick = () => {
+            document.querySelectorAll('.option-card').forEach(el => el.classList.remove('selected'));
+            div.classList.add('selected');
+            selectedAns = i;
+            nextBtn.classList.add('ready');
+          };
+          optionsContainer.appendChild(div);
+        });
+      });
+    }
+
+    function nextQuestion() {
+      if (selectedAns === null) return;
+      const stage = document.getElementById('stage-1');
+      stage.classList.add('fade-out');
+      
+      setTimeout(() => {
+        stage.classList.remove('fade-out');
+        currentQ++;
+        if (currentQ < quizData.length) renderQuestion(currentQ);
+        else goToStage(2);
+      }, 500);
+    }
+
+    /* 4. STAGE MANAGER */
+    function goToStage(stageNum) {
+      document.querySelectorAll('.stage').forEach(el => {
+        if(el.classList.contains('active')) {
+          el.classList.add('fade-out');
+          setTimeout(() => el.classList.remove('active', 'fade-out'), 500);
+        }
+      });
+      setTimeout(() => {
+        document.getElementById(`stage-${stageNum}`).classList.add('active');
+        if (stageNum === 1) renderQuestion(0);
+        if (stageNum === 2) setupTrickButton();
+        if (stageNum === 3) fireConfetti();
+      }, 500);
+    }
+
+    /* 5. EVASIVE BUTTON (Text Changing Singlish Trick) */
+    function setupTrickButton() {
+      const btnNo = document.getElementById('btn-no');
+      const btnYes = document.getElementById('btn-yes');
+      let yesScale = 1;
+      
+      // Fun Singlish phrases when they try to click "No"
+      const funnyPhrases = ["Baha 😜", "Boru kiyanna epa! 😂", "Mawa allanna ba", "Ae moko e?", "Adare nathuwada? 🥺", "Huuu!"];
+      let phraseIndex = 0;
+
+      const evade = (e) => {
+        e.preventDefault();
+        
+        // Change text
+        phraseIndex = (phraseIndex + 1) % funnyPhrases.length;
+        btnNo.innerText = funnyPhrases[phraseIndex];
+
+        const btnRect = btnNo.getBoundingClientRect();
+        const maxW = window.innerWidth - btnRect.width - 40;
+        const maxH = window.innerHeight - btnRect.height - 40;
+        
+        const newX = Math.max(20, Math.floor(Math.random() * maxW));
+        const newY = Math.max(20, Math.floor(Math.random() * maxH));
+
+        btnNo.style.position = 'fixed';
+        btnNo.style.left = `${newX}px`;
+        btnNo.style.top = `${newY}px`;
+        btnNo.style.transform = `rotate(${Math.random() * 30 - 15}deg)`;
+
+        yesScale += 0.12;
+        btnYes.style.transform = `scale(${yesScale})`;
+        btnYes.style.boxShadow = `0 ${10*yesScale}px ${25*yesScale}px rgba(244, 114, 182, 0.5)`;
+      };
+
+      btnNo.addEventListener('mouseover', evade);
+      btnNo.addEventListener('touchstart', evade, {passive: false});
+      btnNo.addEventListener('click', evade);
+    }
+
+    /* 6. CONFETTI */
+    const confCanvas = document.getElementById('confetti-canvas');
+    const ctxC = confCanvas.getContext('2d');
+    let confActive = false, confElements = [];
+    const colors = ['#a78bfa', '#f472b6', '#34d399', '#fef08a', '#ffffff'];
+
+    function drawConfetti() {
+      if(!confActive) return;
+      ctxC.clearRect(0, 0, confCanvas.width, confCanvas.height);
+      let activeCount = 0;
+      confElements.forEach(p => {
+        if(p.y < confCanvas.height) activeCount++;
+        p.x += p.vx; p.y += p.vy; p.vy += 0.4; p.rot += p.rotSpeed;
+        ctxC.save(); ctxC.translate(p.x, p.y); ctxC.rotate(p.rot * Math.PI / 180);
+        ctxC.fillStyle = p.color;
+        if(p.size % 2 === 0) ctxC.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+        else { ctxC.beginPath(); ctxC.arc(0, 0, p.size/2, 0, Math.PI*2); ctxC.fill(); }
+        ctxC.restore();
+      });
+      if(activeCount > 0) requestAnimationFrame(drawConfetti);
+      else { confActive = false; ctxC.clearRect(0, 0, confCanvas.width, confCanvas.height); }
+    }
+
+    function fireConfetti() {
+      confCanvas.width = window.innerWidth; confCanvas.height = window.innerHeight;
+      confElements = [];
+      for(let i=0; i<120; i++) {
+        confElements.push({
+          x: confCanvas.width / 2, y: confCanvas.height / 2 + 100,
+          vx: (Math.random() - 0.5) * 25, vy: (Math.random() - 1) * 22 - 5,
+          size: Math.random() * 8 + 5, color: colors[Math.floor(Math.random() * colors.length)],
+          rot: Math.random() * 360, rotSpeed: (Math.random() - 0.5) * 10
+        });
+      }
+      confActive = true; drawConfetti();
+    }
+
+    /* 7. APP FLOW & RESET */
+    function startScanningProcess() {
+      const titleElem = document.getElementById('title-0');
+      const track = document.getElementById('scan-track');
+      const fill = document.getElementById('scan-fill');
+      const sub = document.getElementById('sub-0');
+      const btn = document.getElementById('btn-start');
+      const ui = document.getElementById('scan-ui');
+
+      // Reset DOM for stage 0
+      sub.style.opacity = '0';
+      btn.style.display = 'none';
+      btn.style.opacity = '0';
+      ui.innerHTML = `<div class="ring-bg"></div><div class="ring-fill"></div><i class="ph ph-heartbeat scanner-icon"></i>`;
+
+      setTimeout(() => {
+        typeWriter("Connecting...", titleElem, 40, () => {
+          track.style.display = 'block';
+          let p = 0;
+          let loadInterval = setInterval(() => {
+            p += Math.random() * 6 + 3;
+            if(p > 100) p = 100;
+            fill.style.width = `${p}%`;
+            if(p === 100) {
+              clearInterval(loadInterval);
+              setTimeout(() => {
+                track.style.display = 'none';
+                ui.innerHTML = '<i class="ph-fill ph-check-circle scanner-icon" style="color: var(--accent-tertiary); font-size: 4rem;"></i>';
+                typeWriter("Vitals Scanned.", titleElem, 40, () => {
+                  sub.style.opacity = '1';
+                  setTimeout(() => {
+                    btn.style.display = 'inline-flex';
+                    setTimeout(() => btn.style.opacity = '1', 50);
+                  }, 600);
+                });
+              }, 400);
+            }
+          }, 90);
+        });
+      }, 400);
+    }
+
+    function resetApp() {
+      // Hide all stages
+      document.querySelectorAll('.stage').forEach(el => el.classList.remove('active', 'fade-out'));
+      
+      // Reset variables & DOM
+      currentQ = 0; selectedAns = null;
+      document.getElementById('btn-yes').style.transform = 'scale(1)';
+      document.getElementById('btn-yes').style.boxShadow = '';
+      
+      const btnNo = document.getElementById('btn-no');
+      btnNo.style.position = 'absolute';
+      btnNo.style.left = 'auto'; btnNo.style.top = 'auto';
+      btnNo.innerText = "Baha 😜";
+
+      // Re-initialize Stage 0
+      document.getElementById('stage-0').classList.add('active');
+      startScanningProcess();
+    }
+
+    window.onload = startScanningProcess;
+  </script>
+</body>
+</html>
