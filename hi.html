@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>a garden for you</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Quicksand:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink: #3A2A44;
+    --ink-soft: #6E5C79;
+    --vine: #4C9A6A;
+    --leaf: #6FBF73;
+    --gold: #F4A300;
+    --c1: #FF8FA3;
+    --c2: #FFC145;
+    --c3: #B185DB;
+    --c4: #6FB7DE;
+    --c5: #E85C6B;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+
+  body{
+    color: var(--ink);
+    font-family:'Quicksand', sans-serif;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{
+      animation-duration:.01ms !important;
+      transition-duration:.01ms !important;
+      scroll-behavior:auto !important;
+    }
+  }
+
+  .bg-layer{
+    position:fixed;
+    inset:0;
+    z-index:-2;
+    background:#FDEBF3;
+    transition: background-color .1s linear;
+  }
+
+  .petal-layer{
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    overflow:hidden;
+    pointer-events:none;
+  }
+  .petal{
+    position:absolute;
+    top:-5%;
+    width:10px;
+    height:10px;
+    border-radius: 0 60% 0 60%;
+    opacity:.55;
+    animation: fall linear infinite;
+  }
+  @keyframes fall{
+    0%{ transform: translate(0,0) rotate(0deg); }
+    100%{ transform: translate(var(--drift), 108vh) rotate(320deg); }
+  }
+
+  /* ---------------- HERO ---------------- */
+
+  .hero{
+    height:100svh;
+    min-height:520px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding: 2rem;
+    position:relative;
+  }
+
+  .hero-flower{ width: 110px; height:110px; margin-bottom: 1.6rem; overflow:visible; }
+  .hero-flower .petal-shape{
+    transform-origin: 50px 50px;
+    transform: scale(0);
+    animation: heroBloom 1s cubic-bezier(.34,1.56,.64,1) forwards;
+  }
+  .hero-flower .petal-shape:nth-child(1){ animation-delay:.1s; }
+  .hero-flower .petal-shape:nth-child(2){ animation-delay:.18s; }
+  .hero-flower .petal-shape:nth-child(3){ animation-delay:.26s; }
+  .hero-flower .petal-shape:nth-child(4){ animation-delay:.34s; }
+  .hero-flower .petal-shape:nth-child(5){ animation-delay:.42s; }
+  .hero-flower .petal-shape:nth-child(6){ animation-delay:.5s; }
+  .hero-flower .flower-center{
+    transform-origin:50px 50px;
+    transform: scale(0);
+    animation: heroBloom .6s cubic-bezier(.34,1.56,.64,1) forwards .6s;
+  }
+  @keyframes heroBloom{ to{ transform: scale(1); } }
+  .hero-flower-group{ animation: sway 5s ease-in-out infinite 1.4s; transform-origin: 50px 90px; }
+  @keyframes sway{ 0%,100%{ transform: rotate(-3deg);} 50%{ transform: rotate(3deg);} }
+
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.68rem;
+    letter-spacing:.28em;
+    text-transform:uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 1rem;
+  }
+
+  .hero-title{
+    font-family:'Fraunces', serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: clamp(2.3rem, 7.5vw, 4.2rem);
+    line-height: 1.08;
+    max-width: 15ch;
+    color: var(--ink);
+  }
+  .hero-title .accent{ color: var(--c5); }
+
+  .hero-sub{
+    margin-top: 1.5rem;
+    font-weight: 500;
+    font-size: 1rem;
+    color: var(--ink-soft);
+    max-width: 30ch;
+    line-height: 1.6;
+  }
+
+  .scroll-cue{
+    position:absolute;
+    bottom: 2rem;
+    left:50%;
+    transform: translateX(-50%);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.65rem;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color: var(--ink-soft);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:.5rem;
+    opacity:.75;
+  }
+  .scroll-cue .stem{
+    width:1px; height:34px;
+    background: linear-gradient(to bottom, var(--ink-soft), transparent);
+    animation: grow 1.8s ease-in-out infinite;
+  }
+  @keyframes grow{ 0%,100%{ transform: scaleY(.6); opacity:.4;} 50%{ transform: scaleY(1); opacity:1;} }
+
+  /* ---------------- GARDEN / VINE SECTION ---------------- */
+
+  .garden{
+    position:relative;
+    max-width: 980px;
+    margin:0 auto;
+    padding: 5rem 1.5rem 3rem;
+  }
+
+  #vine-svg{ position:absolute; top:0; left:0; z-index:0; pointer-events:none; }
+  #vine-path{
+    fill:none;
+    stroke: var(--vine);
+    stroke-width: 3;
+    stroke-linecap: round;
+  }
+
+  .bloom-note{
+    position:relative;
+    z-index:1;
+    width:44%;
+    margin-bottom: 8rem;
+    display:flex;
+    align-items:center;
+    gap: 1rem;
+  }
+  .bloom-note:nth-child(odd){ margin-right:auto; flex-direction: row-reverse; text-align:right; }
+  .bloom-note:nth-child(even){ margin-left:auto; text-align:left; }
+
+  .flower-icon{ width:56px; height:56px; flex-shrink:0; overflow:visible; }
+  .flower-icon .petal-shape{
+    transform-origin: 50px 50px;
+    transform: scale(0) rotate(-20deg);
+    transition: transform .55s cubic-bezier(.34,1.56,.64,1);
+  }
+  .flower-icon .flower-center{
+    transform-origin:50px 50px;
+    transform: scale(0);
+    transition: transform .4s cubic-bezier(.34,1.56,.64,1) .4s;
+  }
+  .bloom-note.in .petal-shape{ transform: scale(1) rotate(0deg); }
+  .bloom-note.in .flower-center{ transform: scale(1); }
+  .flower-icon .petal-shape:nth-child(1){ transition-delay:.02s; }
+  .flower-icon .petal-shape:nth-child(2){ transition-delay:.08s; }
+  .flower-icon .petal-shape:nth-child(3){ transition-delay:.14s; }
+  .flower-icon .petal-shape:nth-child(4){ transition-delay:.2s; }
+  .flower-icon .petal-shape:nth-child(5){ transition-delay:.26s; }
+  .flower-icon .petal-shape:nth-child(6){ transition-delay:.32s; }
+
+  .note-body{
+    opacity:0;
+    transform: translateY(14px);
+    transition: opacity .8s ease, transform .8s ease;
+  }
+  .bloom-note.in .note-body{ opacity:1; transform:translateY(0); }
+
+  .note-label{
+    display:block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.6rem;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color: var(--ink-soft);
+    margin-bottom:.5rem;
+  }
+  .note-text{
+    font-family:'Fraunces', serif;
+    font-weight:400;
+    font-size: clamp(1.02rem, 1.9vw, 1.24rem);
+    line-height:1.55;
+  }
+  .note-text em{ font-style:italic; color: var(--c5); }
+
+  @media (max-width: 720px){
+    .garden{ padding: 3.5rem 1.25rem 2rem 2.75rem; }
+    .bloom-note{
+      width:100%;
+      margin-left:0 !important;
+      margin-right:0 !important;
+      margin-bottom:4.5rem;
+      flex-direction:row !important;
+      text-align:left !important;
+    }
+    .flower-icon{ width:46px; height:46px; }
+  }
+
+  /* ---------------- CLOSING ---------------- */
+
+  .closing{
+    position:relative;
+    max-width:600px;
+    margin:0 auto;
+    padding: 2rem 1.5rem 9rem;
+    text-align:center;
+  }
+
+  .final-flower{ width:150px; height:150px; margin: 0 auto 1.6rem; overflow:visible; }
+  .final-flower .petal-shape{
+    transform-origin:50px 50px;
+    transform: scale(0) rotate(-30deg);
+    transition: transform .7s cubic-bezier(.34,1.56,.64,1);
+  }
+  .final-flower .flower-center{
+    transform-origin:50px 50px;
+    transform: scale(0);
+    transition: transform .5s cubic-bezier(.34,1.56,.64,1) .5s;
+  }
+  .closing.bloomed .petal-shape{ transform: scale(1) rotate(0deg); }
+  .closing.bloomed .flower-center{ transform: scale(1); }
+  .final-flower .petal-shape:nth-child(1){ transition-delay:.05s; }
+  .final-flower .petal-shape:nth-child(2){ transition-delay:.13s; }
+  .final-flower .petal-shape:nth-child(3){ transition-delay:.21s; }
+  .final-flower .petal-shape:nth-child(4){ transition-delay:.29s; }
+  .final-flower .petal-shape:nth-child(5){ transition-delay:.37s; }
+  .final-flower .petal-shape:nth-child(6){ transition-delay:.45s; }
+  .final-flower-group{ transform-origin:50px 90px; }
+  .closing.bloomed .final-flower-group{ animation: sway 5s ease-in-out infinite 1.2s; }
+
+  .closing-line{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-weight:600;
+    font-size: clamp(1.7rem, 5vw, 2.4rem);
+    color: var(--ink);
+    opacity:0;
+    transform: translateY(10px);
+    transition: opacity 1s ease .9s, transform 1s ease .9s;
+  }
+  .closing.bloomed .closing-line{ opacity:1; transform:translateY(0); }
+
+  .closing-name{
+    margin-top: .9rem;
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-size:1rem;
+    color: var(--ink-soft);
+    opacity:0;
+    transition: opacity 1s ease 1.2s;
+  }
+  .closing.bloomed .closing-name{ opacity:1; }
+
+  .edit-note{
+    max-width:600px;
+    margin:0 auto;
+    padding: 3rem 1.5rem 4rem;
+    border-top:1px dashed rgba(58,42,68,0.18);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.68rem;
+    line-height:1.8;
+    color: var(--ink-soft);
+    text-align:center;
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-layer" id="bgLayer"></div>
+<div class="petal-layer" id="petalLayer"></div>
+
+<section class="hero">
+  <svg class="hero-flower" viewBox="0 0 100 100">
+    <g class="hero-flower-group">
+      <g fill="var(--c5)">
+        <ellipse class="petal-shape" cx="50" cy="30" rx="12" ry="20"/>
+        <ellipse class="petal-shape" cx="67" cy="40" rx="12" ry="20" transform="rotate(60 50 50)"/>
+        <ellipse class="petal-shape" cx="67" cy="60" rx="12" ry="20" transform="rotate(120 50 50)"/>
+        <ellipse class="petal-shape" cx="50" cy="70" rx="12" ry="20" transform="rotate(180 50 50)"/>
+        <ellipse class="petal-shape" cx="33" cy="60" rx="12" ry="20" transform="rotate(240 50 50)"/>
+        <ellipse class="petal-shape" cx="33" cy="40" rx="12" ry="20" transform="rotate(300 50 50)"/>
+      </g>
+      <circle class="flower-center" cx="50" cy="50" r="11" fill="var(--gold)"/>
+    </g>
+  </svg>
+  <div class="eyebrow">a garden, just for you</div>
+  <h1 class="hero-title">Every day with you, <span class="accent">something blooms.</span></h1>
+  <p class="hero-sub">Scroll down — I planted a few small things I never said out loud.</p>
+  <div class="scroll-cue"><span>keep going</span><span class="stem"></span></div>
+</section>
+
+<section class="garden" id="gardenSection">
+  <svg id="vine-svg"><path id="vine-path" d=""></path></svg>
+
+  <div class="bloom-note" data-color="c1">
+    <svg class="flower-icon" viewBox="0 0 100 100">
+      <g fill="var(--c1)">
+        <ellipse class="petal-shape" cx="50" cy="30" rx="12" ry="20"/>
+        <ellipse class="petal-shape" cx="67" cy="40" rx="12" ry="20" transform="rotate(60 50 50)"/>
+        <ellipse class="petal-shape" cx="67" cy="60" rx="12" ry="20" transform="rotate(120 50 50)"/>
+        <ellipse class="petal-shape" cx="50" cy="70" rx="12" ry="20" transform="rotate(180 50 50)"/>
+        <ellipse class="petal-shape" cx="33" cy="60" rx="12" ry="20" transform="rotate(240 50 50)"/>
+        <ellipse class="petal-shape" cx="33" cy="40" rx="12" ry="20" transform="rotate(300 50 50)"/>
+      </g>
+      <circle class="flower-center" cx="50" cy="50" r="11" fill="var(--gold)"/>
+    </svg>
+    <div class="note-body">
+      <span class="note-label">01 — mornings</span>
+      <p class="note-text">Hamadama udeta oyata Good Morning kiyanne nathuw dan mukuth karanne na sudu.</p>
+    </div>
+  </div>
+
+  <div class="bloom-note" data-color="c2">
+    <svg class="flower-icon" viewBox="0 0 100 100">
+      <g fill="var(--c2)">
+        <ellipse class="petal-shape" cx="50" cy="30" rx="12" ry="20"/>
+        <ellipse class="petal-shape" cx="67" cy="40" rx="12" ry="20" transform="rotate(60 50 50)"/>
+        <ellipse class="petal-shape" cx="67" cy="60" rx="12" ry="20" transform="rotate(120 50 50)"/>
+        <ellipse class="petal-shape" cx="50" cy="70" rx="12" ry="20" transform="rotate(180 50 50)"/>
+        <ellipse class="petal-shape" cx="33" cy="60" rx="12" ry="20" transform="rotate(240 50 50)"/>
+        <ellipse class="petal-shape" cx="33" cy="40" rx="12" ry="20" transform="rotate(300 50 50)"/>
+      </g>
+      <circle class="flower-center" cx="50" cy="50" r="11" fill="var(--gold)"/>
+    </svg>
+    <div class="note-body">
+      <span class="note-label">02 — Hehe</span>
+      <p class="note-text">Man hari aasai uyata huuu kiyala tharaha gassanna.</p>
+    </div>
+  </div>
+
+  <div class="bloom-note" data-color="c3">
+    <svg class="flower-icon" viewBox="0 0 100 100">
+      <g fill="var(--c3)">
+        <ellipse class="petal-shape" cx="50" cy="30" rx="12" ry="20"/>
+        <ellipse class="petal-shape" cx="67" cy="40" rx="12" ry="20" transform="rotate(60 50 50)"/>
+        <ellipse class="petal-shape" cx="67" cy="60" rx="12" ry="20" transform="rotate(120 50 50)"/>
+        <ellipse class="petal-shape" cx="50" cy="70" rx="12" ry="20" transform="rotate(180 50 50)"/>
+        <ellipse class="petal-shape" cx="33" cy="60" rx="12" ry="20" transform="rotate(240 50 50)"/>
+        <ellipse class="petal-shape" cx="33" cy="40" rx="12" ry="20" transform="rotate(300 50 50)"/>
+      </g>
+      <circle class="flower-center" cx="50" cy="50" r="11" fill="var(--gold)"/>
+    </svg>
+    <div class="note-body">
+      <span class="note-label">03 — the way you care</span>
+      <p class="note-text">Oya hamawelema man gana hoyala baluwa anitha aya wage newei.</p>
+    </div>
+  </div>
+
+  <div class="bloom-note" data-color="c4">
+    <svg class="flower-icon" viewBox="0 0 100 100">
+      <g fill="var(--c4)">
+        <ellipse class="petal-shape" cx="50" cy="30" rx="12" ry="20"/>
+        <ellipse class="petal-shape" cx="67" cy="40" rx="12" ry="20" transform="rotate(60 50 50)"/>
+        <ellipse class="petal-shape" cx="67" cy="60" rx="12" ry="20" transform="rotate(120 50 50)"/>
+        <ellipse class="petal-shape" cx="50" cy="70" rx="12" ry="20" transform="rotate(180 50 50)"/>
+        <ellipse class="petal-shape" cx="33" cy="60" rx="12" ry="20" transform="rotate(240 50 50)"/>
+        <ellipse class="petal-shape" cx="33" cy="40" rx="12" ry="20" transform="rotate(300 50 50)"/>
+      </g>
+      <circle class="flower-center" cx="50" cy="50" r="11" fill="var(--gold)"/>
+    </svg>
+    <div class="note-body">
+      <span class="note-label">04 — lately</span>
+      <p class="note-text">Tika kalayak yaddi theruna man mona situation ekaka hitiyath oya gana hithapuwama <em>mava wenama lokekata yanawa kiyala</em>.</p>
+    </div>
+  </div>
+
+  <div class="bloom-note" data-color="c5">
+    <svg class="flower-icon" viewBox="0 0 100 100">
+      <g fill="var(--c5)">
+        <ellipse class="petal-shape" cx="50" cy="30" rx="12" ry="20"/>
+        <ellipse class="petal-shape" cx="67" cy="40" rx="12" ry="20" transform="rotate(60 50 50)"/>
+        <ellipse class="petal-shape" cx="67" cy="60" rx="12" ry="20" transform="rotate(120 50 50)"/>
+        <ellipse class="petal-shape" cx="50" cy="70" rx="12" ry="20" transform="rotate(180 50 50)"/>
+        <ellipse class="petal-shape" cx="33" cy="60" rx="12" ry="20" transform="rotate(240 50 50)"/>
+        <ellipse class="petal-shape" cx="33" cy="40" rx="12" ry="20" transform="rotate(300 50 50)"/>
+      </g>
+      <circle class="flower-center" cx="50" cy="50" r="11" fill="var(--gold)"/>
+    </svg>
+    <div class="note-body">
+      <span class="note-label">05 — the plain truth</span>
+      <p class="note-text">I love you. Not as a big event. As a fact that's simply, quietly true.</p>
+    </div>
+  </div>
+</section>
+
+<section class="closing" id="closing">
+  <svg class="final-flower" viewBox="0 0 100 100">
+    <g class="final-flower-group">
+      <g fill="var(--c5)">
+        <ellipse class="petal-shape" cx="50" cy="28" rx="14" ry="22"/>
+        <ellipse class="petal-shape" cx="70" cy="39" rx="14" ry="22" transform="rotate(60 50 50)"/>
+        <ellipse class="petal-shape" cx="70" cy="61" rx="14" ry="22" transform="rotate(120 50 50)"/>
+        <ellipse class="petal-shape" cx="50" cy="72" rx="14" ry="22" transform="rotate(180 50 50)"/>
+        <ellipse class="petal-shape" cx="30" cy="61" rx="14" ry="22" transform="rotate(240 50 50)"/>
+        <ellipse class="petal-shape" cx="30" cy="39" rx="14" ry="22" transform="rotate(300 50 50)"/>
+      </g>
+      <circle class="flower-center" cx="50" cy="50" r="13" fill="var(--gold)"/>
+    </g>
+  </svg>
+  <p class="closing-line">I love you.</p>
+  <p class="closing-name">— Oshadha Bandara</p>
+</section>
+
+<div class="edit-note">
+  Gudak aadaleyi halida amathaka karanna epaaa
+</div>
+
+<script>
+(function(){
+  /* ---- background color shift on scroll ---- */
+  const stops = [
+    {p:0,    c:[253,235,243]},
+    {p:0.28, c:[253,240,220]},
+    {p:0.55, c:[232,243,225]},
+    {p:0.78, c:[231,236,251]},
+    {p:1,    c:[243,227,247]}
+  ];
+  const bgLayer = document.getElementById('bgLayer');
+
+  function lerp(a,b,t){ return Math.round(a + (b-a)*t); }
+
+  function bgForProgress(p){
+    for(let i=0;i<stops.length-1;i++){
+      const s0 = stops[i], s1 = stops[i+1];
+      if(p >= s0.p && p <= s1.p){
+        const t = (p - s0.p) / (s1.p - s0.p || 1);
+        const r = lerp(s0.c[0], s1.c[0], t);
+        const g = lerp(s0.c[1], s1.c[1], t);
+        const b = lerp(s0.c[2], s1.c[2], t);
+        return `rgb(${r},${g},${b})`;
+      }
+    }
+    return `rgb(${stops[stops.length-1].c.join(',')})`;
+  }
+
+  function updateBg(){
+    const docH = document.documentElement.scrollHeight - window.innerHeight;
+    const p = docH > 0 ? Math.max(0, Math.min(1, window.scrollY / docH)) : 0;
+    bgLayer.style.backgroundColor = bgForProgress(p);
+  }
+
+  /* ---- falling petals ---- */
+  const petalColors = ['#FF8FA3','#FFC145','#B185DB','#6FB7DE','#E85C6B'];
+  const petalLayer = document.getElementById('petalLayer');
+  const petalCount = window.innerWidth < 700 ? 10 : 18;
+  for(let i=0;i<petalCount;i++){
+    const el = document.createElement('div');
+    el.className = 'petal';
+    const color = petalColors[i % petalColors.length];
+    const left = Math.random()*100;
+    const size = 7 + Math.random()*7;
+    const duration = 10 + Math.random()*10;
+    const delay = Math.random()*-20;
+    const drift = (Math.random()*80 - 40) + 'px';
+    el.style.left = left + 'vw';
+    el.style.width = size + 'px';
+    el.style.height = size + 'px';
+    el.style.background = color;
+    el.style.animationDuration = duration + 's';
+    el.style.animationDelay = delay + 's';
+    el.style.setProperty('--drift', drift);
+    petalLayer.appendChild(el);
+  }
+
+  /* ---- vine growth (same technique as thread) ---- */
+  const svg = document.getElementById('vine-svg');
+  const path = document.getElementById('vine-path');
+  const section = document.getElementById('gardenSection');
+  const notes = Array.from(document.querySelectorAll('.bloom-note'));
+  const closing = document.getElementById('closing');
+
+  let pathLength = 0;
+
+  function catmullRomToBezierPath(pts){
+    if(pts.length < 2) return '';
+    let d = `M ${pts[0].x},${pts[0].y}`;
+    for(let i=0;i<pts.length-1;i++){
+      const p0 = pts[i-1] || pts[i];
+      const p1 = pts[i];
+      const p2 = pts[i+1];
+      const p3 = pts[i+2] || p2;
+      const cp1x = p1.x + (p2.x - p0.x)/6;
+      const cp1y = p1.y + (p2.y - p0.y)/6;
+      const cp2x = p2.x - (p3.x - p1.x)/6;
+      const cp2y = p2.y - (p3.y - p1.y)/6;
+      d += ` C ${cp1x},${cp1y} ${cp2x},${cp2y} ${p2.x},${p2.y}`;
+    }
+    return d;
+  }
+
+  function measure(){
+    const secRect = section.getBoundingClientRect();
+    const width = section.clientWidth;
+    const height = section.offsetHeight;
+
+    svg.setAttribute('width', width);
+    svg.setAttribute('height', height);
+    svg.style.width = width + 'px';
+    svg.style.height = height + 'px';
+
+    const points = notes.map(note => {
+      const icon = note.querySelector('.flower-icon');
+      const r = icon.getBoundingClientRect();
+      const x = r.left + r.width/2 - secRect.left;
+      const y = r.top + r.height/2 - secRect.top;
+      return {x,y};
+    });
+
+    const first = points[0], last = points[points.length-1];
+    const full = [{x:first.x, y:-40}, ...points, {x:last.x, y:height+40}];
+    path.setAttribute('d', catmullRomToBezierPath(full));
+    pathLength = path.getTotalLength();
+    path.style.strokeDasharray = pathLength;
+    updateDash();
+  }
+
+  function updateDash(){
+    const secRect = section.getBoundingClientRect();
+    const vh = window.innerHeight;
+    const total = secRect.height + vh;
+    const traveled = vh - secRect.top;
+    let progress = traveled / total;
+    progress = Math.max(0, Math.min(1, progress));
+    path.style.strokeDashoffset = pathLength * (1 - progress);
+  }
+
+  let ticking = false;
+  function onScroll(){
+    updateBg();
+    if(!ticking){
+      requestAnimationFrame(()=>{ updateDash(); ticking=false; });
+      ticking = true;
+    }
+  }
+
+  let resizeTimer;
+  function onResize(){
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(measure, 150);
+  }
+
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onResize);
+  window.addEventListener('load', () => { measure(); updateBg(); });
+  document.fonts && document.fonts.ready.then(measure);
+  setTimeout(measure, 300);
+
+  const noteObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); });
+  }, {threshold:.45});
+  notes.forEach(n=>noteObserver.observe(n));
+
+  const closingObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ closing.classList.add('bloomed'); closingObserver.unobserve(closing); }
+    });
+  }, {threshold:.5});
+  closingObserver.observe(closing);
+})();
+</script>
+
+</body>
+</html>
