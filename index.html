@@ -4,617 +4,52 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Our Private Corner 💕</title>
-
-  <!-- Google Fonts for Modern UI -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,400&display=swap" rel="stylesheet">
-
-  <style>
-    :root {
-      --bg: #0b0d17;
-      --bg-gradient: radial-gradient(circle at 50% 0%, #2a1b4e 0%, #0b0d17 70%);
-      --glass: rgba(255, 255, 255, 0.05);
-      --glass-hover: rgba(255, 255, 255, 0.09);
-      --glass-border: rgba(255, 255, 255, 0.12);
-      
-      --accent-pink: #ff5e97;
-      --accent-purple: #9d4edd;
-      --accent-blue: #4ea8de;
-      --text-main: #f8f9fa;
-      --text-muted: #a0a5ba;
-
-      --font-serif: 'Playfair Display', serif;
-      --font-sans: 'Outfit', sans-serif;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: var(--font-sans);
-      background: var(--bg);
-      background-image: var(--bg-gradient);
-      background-attachment: fixed;
-      color: var(--text-main);
-      min-height: 100vh;
-      overflow-x: hidden;
-      line-height: 1.6;
-    }
-
-    /* Ambient Background Glows */
-    .glow-orb {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(120px);
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.35;
-    }
-
-    .orb-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: var(--accent-purple); }
-    .orb-2 { bottom: -10%; right: -10%; width: 50vw; height: 50vw; background: var(--accent-pink); }
-
-    /* Glassmorphism Card Utility */
-    .glass-card {
-      background: var(--glass);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--glass-border);
-      border-radius: 24px;
-      padding: 1.8rem;
-      margin-bottom: 2rem;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    /* Floating Header Navigation */
-    header {
-      position: fixed;
-      top: 1rem;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 90%;
-      max-width: 680px;
-      background: rgba(11, 13, 23, 0.75);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
-      border: 1px solid var(--glass-border);
-      border-radius: 40px;
-      padding: 0.6rem 1.2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 1000;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-    }
-
-    .nav-logo {
-      font-family: var(--font-serif);
-      font-size: 1.1rem;
-      font-weight: 700;
-      background: linear-gradient(45deg, #fff, var(--accent-pink));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-decoration: none;
-    }
-
-    nav {
-      display: flex;
-      gap: 0.8rem;
-    }
-
-    nav a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 0.8rem;
-      font-weight: 500;
-      transition: color 0.2s ease;
-    }
-
-    nav a:hover {
-      color: var(--text-main);
-    }
-
-    /* FULL SCREEN HERO SECTION */
-    .hero-section {
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 0 1.5rem;
-      position: relative;
-      z-index: 10;
-    }
-
-    .hero-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: rgba(255, 94, 151, 0.1);
-      border: 1px solid rgba(255, 94, 151, 0.25);
-      color: var(--accent-pink);
-      padding: 0.4rem 1rem;
-      border-radius: 30px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      margin-bottom: 1.5rem;
-    }
-
-    .hero-title {
-      font-family: var(--font-serif);
-      font-size: clamp(3rem, 10vw, 5.5rem);
-      font-weight: 700;
-      line-height: 1.05;
-      letter-spacing: -1px;
-      margin-bottom: 1rem;
-      background: linear-gradient(180deg, #ffffff 0%, #d0d5ed 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .hero-title span {
-      font-family: var(--font-sans);
-      font-weight: 300;
-      color: var(--accent-pink);
-      -webkit-text-fill-color: var(--accent-pink);
-    }
-
-    .hero-meta {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1rem;
-      margin-top: 1.5rem;
-    }
-
-    .meta-pill {
-      background: var(--glass);
-      border: 1px solid var(--glass-border);
-      padding: 0.5rem 1rem;
-      border-radius: 16px;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    .meta-pill strong {
-      color: var(--text-main);
-    }
-
-    .scroll-indicator {
-      position: absolute;
-      bottom: 2.5rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.5rem;
-      color: var(--text-muted);
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      animation: bounce 2s infinite;
-    }
-
-    @keyframes bounce {
-      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-      40% { transform: translateY(-8px); }
-      60% { transform: translateY(-4px); }
-    }
-
-    /* MAIN CONTENT CONTAINER */
-    main {
-      position: relative;
-      z-index: 10;
-      max-width: 680px;
-      margin: 0 auto;
-      padding: 0 1.5rem 2rem 1.5rem;
-    }
-
-    section {
-      padding-top: 5rem;
-    }
-
-    .section-header {
-      margin-bottom: 1.5rem;
-    }
-
-    .section-subtitle {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: var(--accent-pink);
-      font-weight: 700;
-    }
-
-    .section-title {
-      font-family: var(--font-serif);
-      font-size: 2.2rem;
-      color: var(--text-main);
-    }
-
-    /* RELATIONSHIP TIMER GRID */
-    .timer-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0.8rem;
-      margin-top: 1rem;
-      text-align: center;
-    }
-
-    .timer-item {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--glass-border);
-      border-radius: 16px;
-      padding: 1rem 0.3rem;
-    }
-
-    .timer-value {
-      font-family: var(--font-serif);
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: var(--accent-pink);
-      display: block;
-    }
-
-    .timer-label {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-    }
-
-    /* TIMELINE STYLING */
-    .timeline {
-      position: relative;
-      padding-left: 1.2rem;
-    }
-
-    .timeline::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      background: linear-gradient(to bottom, var(--accent-pink), var(--accent-purple));
-    }
-
-    .timeline-node {
-      position: relative;
-      margin-bottom: 2.2rem;
-      padding-left: 1rem;
-    }
-
-    .timeline-node:last-child {
-      margin-bottom: 0;
-    }
-
-    .timeline-node::before {
-      content: '';
-      position: absolute;
-      left: -1.65rem;
-      top: 0.3rem;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--accent-pink);
-      box-shadow: 0 0 10px var(--accent-pink);
-    }
-
-    .timeline-date {
-      font-size: 0.75rem;
-      color: var(--accent-pink);
-      font-weight: 600;
-      text-transform: uppercase;
-    }
-
-    .timeline-h3 {
-      font-family: var(--font-serif);
-      font-size: 1.25rem;
-      margin: 0.2rem 0;
-    }
-
-    .timeline-p {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
-
-    .timeline-list {
-      list-style: none;
-      margin-top: 0.4rem;
-    }
-
-    .timeline-list li {
-      position: relative;
-      padding-left: 1.2rem;
-      font-size: 0.88rem;
-      color: #d0d5ed;
-      margin-bottom: 0.3rem;
-    }
-
-    .timeline-list li::before {
-      content: '•';
-      position: absolute;
-      left: 0;
-      color: var(--accent-pink);
-    }
-
-    /* GALLERY STYLING */
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
-    }
-
-    .gallery-card {
-      position: relative;
-      border-radius: 18px;
-      overflow: hidden;
-      aspect-ratio: 1;
-      border: 1px solid var(--glass-border);
-    }
-
-    .gallery-card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.5s ease;
-    }
-
-    .gallery-card:hover img {
-      transform: scale(1.08);
-    }
-
-    .gallery-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(11,13,23,0.9) 0%, transparent 60%);
-      display: flex;
-      align-items: flex-end;
-      padding: 1rem;
-    }
-
-    .gallery-caption {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text-main);
-    }
-
-    /* NEW BREATHING/CALM SECTION */
-    .breath-box {
-      text-align: center;
-      padding: 2.5rem 1rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .breath-circle-wrap {
-      position: relative;
-      width: 180px;
-      height: 180px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin: 1.5rem 0;
-    }
-
-    .breath-pulse-bg {
-      position: absolute;
-      inset: 0;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(255,94,151,0.4) 0%, rgba(157,78,221,0) 70%);
-      transform: scale(0.8);
-      opacity: 0.5;
-      transition: transform 4s ease-in-out, opacity 4s ease-in-out;
-    }
-
-    .breath-circle {
-      width: 110px;
-      height: 110px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 2.5rem;
-      cursor: pointer;
-      box-shadow: 0 0 30px rgba(255, 94, 151, 0.4);
-      z-index: 2;
-      transition: transform 4s ease-in-out;
-      user-select: none;
-    }
-
-    /* Active Breathing Animation States */
-    .breath-box.inhale .breath-circle { transform: scale(1.45); }
-    .breath-box.inhale .breath-pulse-bg { transform: scale(1.8); opacity: 0.9; }
-
-    .breath-box.exhale .breath-circle { transform: scale(0.9); }
-    .breath-box.exhale .breath-pulse-bg { transform: scale(0.7); opacity: 0.3; }
-
-    .breath-status {
-      font-family: var(--font-serif);
-      font-size: 1.3rem;
-      color: var(--accent-pink);
-      min-height: 2rem;
-      margin-top: 0.5rem;
-    }
-
-    .breath-note {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      margin-top: 1rem;
-      max-width: 80%;
-    }
-
-    /* STORIES SECTION */
-    .story-card {
-      cursor: pointer;
-    }
-
-    .story-tag {
-      font-size: 0.7rem;
-      color: var(--accent-purple);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .story-title {
-      font-family: var(--font-serif);
-      font-size: 1.3rem;
-      margin: 0.3rem 0;
-    }
-
-    .story-snippet {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-    }
-
-    .story-body {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s ease, opacity 0.4s ease;
-      opacity: 0;
-      font-size: 0.9rem;
-      color: #d0d5ed;
-      border-top: 1px solid var(--glass-border);
-      margin-top: 0;
-      padding-top: 0;
-    }
-
-    .story-card.active .story-body {
-      max-height: 300px;
-      opacity: 1;
-      margin-top: 1rem;
-      padding-top: 1rem;
-    }
-
-    /* FAIRY TALES SECTION */
-    .tale-selector {
-      display: flex;
-      gap: 0.6rem;
-      overflow-x: auto;
-      padding-bottom: 0.8rem;
-      margin-bottom: 1rem;
-      scrollbar-width: none;
-    }
-
-    .tale-selector::-webkit-scrollbar {
-      display: none;
-    }
-
-    .tale-btn {
-      background: var(--glass);
-      border: 1px solid var(--glass-border);
-      color: var(--text-muted);
-      padding: 0.6rem 1.2rem;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      font-weight: 500;
-      white-space: nowrap;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .tale-btn.active {
-      background: rgba(255, 94, 151, 0.2);
-      border-color: var(--accent-pink);
-      color: var(--accent-pink);
-      font-weight: 600;
-    }
-
-    .tale-display-box {
-      min-height: 200px;
-      line-height: 1.8;
-      font-size: 0.95rem;
-      color: #d0d5ed;
-      white-space: pre-line;
-    }
-
-    .tale-loading {
-      text-align: center;
-      color: var(--text-muted);
-      font-style: italic;
-      padding: 2rem 0;
-    }
-
-    /* FOOTER COPYRIGHT */
-    footer {
-      position: relative;
-      z-index: 10;
-      text-align: center;
-      padding: 2rem 1.5rem 3rem;
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      border-top: 1px solid var(--glass-border);
-      margin-top: 3rem;
-    }
-
-    footer p {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.3rem;
-    }
-
-    /* MOBILE RESPONSIVE FINE-TUNING */
-    @media (max-width: 480px) {
-      header { width: 95%; padding: 0.5rem 0.8rem; }
-      nav { gap: 0.5rem; }
-      nav a { font-size: 0.72rem; }
-      .gallery-grid { grid-template-columns: 1fr; }
-    }
-
-    button{
-      color:#fff;
-      background-color: transparent;
-      cursor: pointer;
-      border: none;
-      transition: 1s;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Ambient Glowing Orbs -->
-  <div class="glow-orb orb-1"></div>
-  <div class="glow-orb orb-2"></div>
-
   <!-- Floating Navigation -->
   <header>
-    <a href="#hero" class="nav-logo">O & C</a>
-    <nav>
+    <a href="#hero" class="brand">
+      <span class="seal">O♥C</span>
+      <span class="brand-name">Oshadha & Chaya</span>
+    </a>
+    <nav class="main-nav">
       <a href="#about">Story</a>
       <a href="#timeline">Journey</a>
       <a href="#gallery">Vault</a>
       <a href="#calm">Breathe</a>
       <a href="#stories">Letters</a>
-      <a href="#tales">Tales 🏰</a>
+      <a href="#tales">Tales</a>
+      <a href="games.html" class="nav-cta">Games</a>
     </nav>
+    <button class="menu-toggle" id="menu-toggle" aria-label="Open menu">☰</button>
   </header>
+
+  <nav class="mobile-nav" id="mobile-nav">
+    <a href="#about">Story</a>
+    <a href="#timeline">Journey</a>
+    <a href="#gallery">Vault</a>
+    <a href="#calm">Breathe</a>
+    <a href="#stories">Letters</a>
+    <a href="#tales">Tales</a>
+    <a href="games.html">Games 🎮</a>
+  </nav>
 
   <!-- 1. FULL SCREEN HERO HOMEPAGE -->
   <section class="hero-section" id="hero">
-    <div class="hero-tag">✨ Our Private World</div>
-    <h1 class="hero-title">OSHADHA <span>&</span> CHAYA</h1>
-    
+    <div class="hero-tag">a little world we keep, just for us</div>
+    <h1 class="hero-title">Oshadha <span class="amp">&amp;</span> Chaya</h1>
+
     <div class="hero-meta">
       <div class="meta-pill">Together since <strong>April 12, 2026</strong></div>
-      <div class="meta-pill">His Birthday: <strong>Aug 22, 2006</strong></div>
-      <div class="meta-pill">Her Birthday: <strong>May 16, 2007</strong></div>
+      <div class="meta-pill">His birthday: <strong>Aug 22, 2006</strong></div>
+      <div class="meta-pill">Her birthday: <strong>May 16, 2007</strong></div>
     </div>
 
     <div class="hero-meta">
-      <a href="hi.html"><div class="meta-pill"><strong>Surpricee.............</strong></div></a>
+      <a href="hi.html" class="meta-pill">Surpricee.............</a>
+      <a href="games.html" class="meta-pill cta">Feeling stressed? Play a game 🎮</a>
     </div>
 
     <div class="scroll-indicator">
@@ -628,14 +63,14 @@
 
     <!-- 2. RELATIONSHIP COUNTER -->
     <section id="about">
-      <div class="section-header">
-        <span class="section-subtitle">Real-time Tracker</span>
+      <div class="section-header centered">
+        <span class="eyebrow">counting quietly</span>
         <h2 class="section-title">Days In Love</h2>
       </div>
 
-      <div class="glass-card">
-        <p style="color: var(--text-muted); font-size: 0.9rem; text-align: center;">Counting every special moment shared together since April 12, 2026</p>
-        
+      <div class="note-card tilt-l">
+        <p class="muted" style="font-size: 0.9rem; text-align: center;">Every second, still adding up — since April 12, 2026</p>
+
         <div class="timer-grid">
           <div class="timer-item">
             <span class="timer-value" id="days">0</span>
@@ -659,12 +94,12 @@
 
     <!-- 3. TIMELINE SECTION -->
     <section id="timeline">
-      <div class="section-header">
-        <span class="section-subtitle">Milestones</span>
+      <div class="section-header centered">
+        <span class="eyebrow">how we got here</span>
         <h2 class="section-title">Our Timeline</h2>
       </div>
 
-      <div class="glass-card">
+      <div class="note-card tilt-r">
         <div class="timeline">
 
           <div class="timeline-node">
@@ -723,8 +158,8 @@
 
     <!-- 4. GALLERY SECTION -->
     <section id="gallery">
-      <div class="section-header">
-        <span class="section-subtitle">Memories</span>
+      <div class="section-header centered">
+        <span class="eyebrow">frozen little moments</span>
         <h2 class="section-title">Photo Vault</h2>
       </div>
 
@@ -738,7 +173,7 @@
         <div class="gallery-card">
           <img src="img2.jpg" alt="Memory">
           <div class="gallery-overlay">
-            <span class="gallery-caption">Mountain Hike Memories ⛰️</span>
+            <span class="gallery-caption">Mountain Hike ⛰️</span>
           </div>
         </div>
         <div class="gallery-card">
@@ -750,21 +185,21 @@
         <div class="gallery-card">
           <img src="img4.jpg" alt="Memory">
           <div class="gallery-overlay">
-            <span class="gallery-caption">Favorite Smile 💕</span>
+            <span class="gallery-caption">Favorite Smile</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 5. REPLACED: BREATHING & REASSURANCE CORNER -->
+    <!-- 5. BREATHING & REASSURANCE CORNER -->
     <section id="calm">
-      <div class="section-header">
-        <span class="section-subtitle">Take A Moment</span>
+      <div class="section-header centered">
+        <span class="eyebrow">take a moment</span>
         <h2 class="section-title">Breathe With Me 🫀</h2>
       </div>
 
-      <div class="glass-card breath-box" id="breath-box">
-        <p style="font-size: 0.88rem; color: var(--text-muted);">Whenever you feel anxious or overwhelmed, tap the heart to breathe together.</p>
+      <div class="note-card breath-box tilt-l" id="breath-box">
+        <p class="muted" style="font-size: 0.88rem;">Whenever you feel anxious or overwhelmed, tap the heart to breathe together.</p>
 
         <div class="breath-circle-wrap">
           <div class="breath-pulse-bg"></div>
@@ -776,14 +211,25 @@
       </div>
     </section>
 
+    <!-- 5.5 GAMES PROMO -->
+    <section id="games-promo">
+      <div class="note-card games-promo tilt-r">
+        <div class="games-promo-text">
+          <h3>Need to unwind? 🎮</h3>
+          <p class="muted">Tic-tac-toe against the computer, a memory match & a bubble-popping corner just for you.</p>
+        </div>
+        <a href="games.html" class="pill-btn">Play Now →</a>
+      </div>
+    </section>
+
     <!-- 6. READ WHEN BUSY STORIES -->
     <section id="stories">
-      <div class="section-header">
-        <span class="section-subtitle">Letters</span>
+      <div class="section-header centered">
+        <span class="eyebrow">open when you need me</span>
         <h2 class="section-title">Read When I'm Busy 📖</h2>
       </div>
 
-      <div class="glass-card story-card" onclick="toggleStory(this)">
+      <div class="note-card story-card tilt-l" onclick="toggleStory(this)">
         <span class="story-tag">Read when you miss me</span>
         <h3 class="story-title">A Soft Hug In Written Words</h3>
         <p class="story-snippet">Tap to read when you need a reminder of how much you mean to me...</p>
@@ -792,7 +238,7 @@
         </div>
       </div>
 
-      <div class="glass-card story-card" onclick="toggleStory(this)">
+      <div class="note-card story-card tilt-r" onclick="toggleStory(this)">
         <span class="story-tag">Read when you're overwhelmed</span>
         <h3 class="story-title">You Are Safe & Deeply Loved</h3>
         <p class="story-snippet">Tap to read when everything feels a little too fast...</p>
@@ -804,12 +250,12 @@
 
     <!-- 7. FAIRY TALE LIBRARY SECTION -->
     <section id="tales">
-      <div class="section-header">
-        <span class="section-subtitle">Boredom Buster</span>
+      <div class="section-header centered">
+        <span class="eyebrow">for the boring hours</span>
         <h2 class="section-title">Fairy Tale Corner 🏰</h2>
       </div>
 
-      <div class="glass-card">
+      <div class="note-card tilt-l">
         <!-- Tale Selection Tabs -->
         <div class="tale-selector">
           <button class="tale-btn active" onclick="loadTale('story1.txt', this)">The Disappearing Stars 🌟</button>
@@ -833,6 +279,18 @@
   </footer>
 
   <script>
+    /* MOBILE MENU */
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileNav = document.getElementById('mobile-nav');
+    menuToggle.addEventListener('click', () => {
+      mobileNav.classList.toggle('open');
+      menuToggle.textContent = mobileNav.classList.contains('open') ? '✕' : '☰';
+    });
+    mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      mobileNav.classList.remove('open');
+      menuToggle.textContent = '☰';
+    }));
+
     /* 1. COUNT-UP TIMER (Since April 12, 2026) */
     const startDate = new Date("2026-04-12T00:00:00");
 
@@ -888,7 +346,6 @@
       isBreathing = true;
       let step = 0;
 
-      // Cycle note each time exercise starts
       const randomNote = heartNotes[Math.floor(Math.random() * heartNotes.length)];
       note.innerText = randomNote;
 
@@ -906,7 +363,7 @@
       }
 
       runCycle();
-      breathingInterval = setInterval(runCycle, 4000); // 4 sec inhale, 4 sec exhale
+      breathingInterval = setInterval(runCycle, 4000);
     }
 
     /* 3. ACCORDION STORY TOGGLE */
@@ -923,7 +380,7 @@
 
     function loadTale(filename, btnElement) {
       document.querySelectorAll('.tale-btn').forEach(btn => btn.classList.remove('active'));
-      if(btnElement) btnElement.classList.add('active');
+      if (btnElement) btnElement.classList.add('active');
 
       const contentBox = document.getElementById('tale-content');
       contentBox.innerHTML = '<div class="tale-loading">Opening storybook... ✨</div>';
@@ -941,7 +398,6 @@
         });
     }
 
-    // Automatically load the first story on page start
     loadTale('story1.txt', document.querySelector('.tale-btn'));
   </script>
 </body>
