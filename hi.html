@@ -3,26 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#140c1a">
 <title>a garden for you</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Quicksand:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink: #3A2A44;
-    --ink-soft: #6E5C79;
-    --vine: #4C9A6A;
+    --ink: #f4ecf6;
+    --ink-soft: #b6a4c6;
+    --vine: #6FBF73;
     --leaf: #6FBF73;
-    --gold: #F4A300;
+    --gold: #f6c177;
     --c1: #FF8FA3;
     --c2: #FFC145;
     --c3: #B185DB;
     --c4: #6FB7DE;
-    --c5: #E85C6B;
+    --c5: #ff6b9d;
   }
 
   *{ margin:0; padding:0; box-sizing:border-box; }
-  html{ scroll-behavior:smooth; }
+  html{ scroll-behavior:smooth; background:#140c1a; }
 
   body{
     color: var(--ink);
@@ -43,8 +44,18 @@
     position:fixed;
     inset:0;
     z-index:-2;
-    background:#FDEBF3;
+    background:#140c1a;
     transition: background-color .1s linear;
+  }
+  /* soft ambient glows over the shifting base */
+  .bg-layer::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+      radial-gradient(55% 40% at 80% 10%, rgba(255,107,157,0.16), transparent 60%),
+      radial-gradient(50% 40% at 15% 88%, rgba(120,90,200,0.18), transparent 60%);
+    pointer-events:none;
   }
 
   .petal-layer{
@@ -60,7 +71,7 @@
     width:10px;
     height:10px;
     border-radius: 0 60% 0 60%;
-    opacity:.55;
+    opacity:.6;
     animation: fall linear infinite;
   }
   @keyframes fall{
@@ -82,7 +93,7 @@
     position:relative;
   }
 
-  .hero-flower{ width: 110px; height:110px; margin-bottom: 1.6rem; overflow:visible; }
+  .hero-flower{ width: 110px; height:110px; margin-bottom: 1.6rem; overflow:visible; filter: drop-shadow(0 0 18px rgba(255,107,157,0.45)); }
   .hero-flower .petal-shape{
     transform-origin: 50px 50px;
     transform: scale(0);
@@ -108,7 +119,7 @@
     font-size:.68rem;
     letter-spacing:.28em;
     text-transform:uppercase;
-    color: var(--ink-soft);
+    color: var(--c5);
     margin-bottom: 1rem;
   }
 
@@ -121,7 +132,11 @@
     max-width: 15ch;
     color: var(--ink);
   }
-  .hero-title .accent{ color: var(--c5); }
+  .hero-title .accent{
+    background: linear-gradient(120deg, var(--c5), var(--gold));
+    -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
 
   .hero-sub{
     margin-top: 1.5rem;
@@ -170,6 +185,7 @@
     stroke: var(--vine);
     stroke-width: 3;
     stroke-linecap: round;
+    filter: drop-shadow(0 0 6px rgba(111,191,115,0.6));
   }
 
   .bloom-note{
@@ -184,7 +200,7 @@
   .bloom-note:nth-child(odd){ margin-right:auto; flex-direction: row-reverse; text-align:right; }
   .bloom-note:nth-child(even){ margin-left:auto; text-align:left; }
 
-  .flower-icon{ width:56px; height:56px; flex-shrink:0; overflow:visible; }
+  .flower-icon{ width:56px; height:56px; flex-shrink:0; overflow:visible; filter: drop-shadow(0 0 10px rgba(255,255,255,0.15)); }
   .flower-icon .petal-shape{
     transform-origin: 50px 50px;
     transform: scale(0) rotate(-20deg);
@@ -208,6 +224,13 @@
     opacity:0;
     transform: translateY(14px);
     transition: opacity .8s ease, transform .8s ease;
+    background: rgba(38, 26, 52, 0.55);
+    border: 1px solid rgba(255, 170, 205, 0.14);
+    border-radius: 18px;
+    padding: 1rem 1.2rem;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 20px 50px -24px rgba(0,0,0,0.8);
   }
   .bloom-note.in .note-body{ opacity:1; transform:translateY(0); }
 
@@ -217,7 +240,7 @@
     font-size:.6rem;
     letter-spacing:.18em;
     text-transform:uppercase;
-    color: var(--ink-soft);
+    color: var(--gold);
     margin-bottom:.5rem;
   }
   .note-text{
@@ -251,7 +274,7 @@
     text-align:center;
   }
 
-  .final-flower{ width:150px; height:150px; margin: 0 auto 1.6rem; overflow:visible; }
+  .final-flower{ width:150px; height:150px; margin: 0 auto 1.6rem; overflow:visible; filter: drop-shadow(0 0 22px rgba(255,107,157,0.5)); }
   .final-flower .petal-shape{
     transform-origin:50px 50px;
     transform: scale(0) rotate(-30deg);
@@ -300,19 +323,40 @@
     max-width:600px;
     margin:0 auto;
     padding: 3rem 1.5rem 4rem;
-    border-top:1px dashed rgba(58,42,68,0.18);
+    border-top:1px dashed rgba(255,170,205,0.2);
     font-family:'IBM Plex Mono', monospace;
     font-size:.68rem;
     line-height:1.8;
     color: var(--ink-soft);
     text-align:center;
   }
+
+  .back-home{
+    position:fixed;
+    top:1.2rem; left:1.2rem;
+    z-index:10;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.66rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color: var(--ink-soft);
+    padding:.55rem .95rem;
+    border:1px solid rgba(255,170,205,0.2);
+    border-radius:999px;
+    background: rgba(20,12,26,0.6);
+    backdrop-filter: blur(10px);
+    text-decoration:none;
+    transition: color .2s ease, border-color .2s ease;
+  }
+  .back-home:hover{ color: var(--ink); border-color: rgba(255,170,205,0.45); }
 </style>
 </head>
 <body>
 
 <div class="bg-layer" id="bgLayer"></div>
 <div class="petal-layer" id="petalLayer"></div>
+
+<a href="index.html" class="back-home">← back home</a>
 
 <section class="hero">
   <svg class="hero-flower" viewBox="0 0 100 100">
@@ -452,13 +496,13 @@
 
 <script>
 (function(){
-  /* ---- background color shift on scroll ---- */
+  /* ---- background color shift on scroll (dark romantic palette) ---- */
   const stops = [
-    {p:0,    c:[253,235,243]},
-    {p:0.28, c:[253,240,220]},
-    {p:0.55, c:[232,243,225]},
-    {p:0.78, c:[231,236,251]},
-    {p:1,    c:[243,227,247]}
+    {p:0,    c:[20,12,26]},
+    {p:0.28, c:[30,16,38]},
+    {p:0.55, c:[24,16,40]},
+    {p:0.78, c:[18,16,34]},
+    {p:1,    c:[28,14,32]}
   ];
   const bgLayer = document.getElementById('bgLayer');
 
@@ -485,7 +529,7 @@
   }
 
   /* ---- falling petals ---- */
-  const petalColors = ['#FF8FA3','#FFC145','#B185DB','#6FB7DE','#E85C6B'];
+  const petalColors = ['#FF8FA3','#FFC145','#B185DB','#6FB7DE','#ff6b9d'];
   const petalLayer = document.getElementById('petalLayer');
   const petalCount = window.innerWidth < 700 ? 10 : 18;
   for(let i=0;i<petalCount;i++){
