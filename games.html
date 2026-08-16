@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Games Corner 🎮 | O & C</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <a href="index.html" class="brand">
+      <span class="seal">O♥C</span>
+      <span class="brand-name">Games Corner</span>
+    </a>
+    <nav class="main-nav">
+      <a href="index.html">Home</a>
+      <a href="#ttt">Tic-Tac-Toe</a>
+      <a href="#memory">Memory</a>
+      <a href="#bubbles">Bubbles</a>
+      <a href="#wrap">Pop Wrap</a>
+    </nav>
+    <button class="menu-toggle" id="menu-toggle" aria-label="Open menu">☰</button>
+  </header>
+
+  <nav class="mobile-nav" id="mobile-nav">
+    <a href="index.html">🏠 Home</a>
+    <a href="#ttt">Tic-Tac-Toe</a>
+    <a href="#memory">Memory</a>
+    <a href="#bubbles">Bubbles</a>
+    <a href="#wrap">Pop Wrap</a>
+  </nav>
+
+  <main class="games-main">
+
+    <div class="page-intro">
+      <span class="hero-tag">just for you</span>
+      <h1 class="page-title">Little Games Corner</h1>
+      <p class="page-sub">Whenever things feel like too much, come here for a minute. No pressure, no scores that matter — just something soft to fidget with. 💕</p>
+    </div>
+
+    <!-- TIC TAC TOE (vs computer) -->
+    <section id="ttt">
+      <div class="section-header centered">
+        <span class="eyebrow">you vs the computer</span>
+        <h2 class="section-title">Tic-Tac-Toe ✨</h2>
+      </div>
+
+      <div class="note-card tilt-l">
+        <div class="ttt-mode-row">
+          <button class="mode-chip active" id="mode-easy" onclick="setDifficulty('easy')">Easy</button>
+          <button class="mode-chip" id="mode-hard" onclick="setDifficulty('hard')">Smart</button>
+        </div>
+
+        <div class="ttt-status" id="ttt-status">Your turn — you're X</div>
+        <div class="ttt-board" id="ttt-board"></div>
+        <div class="score-row">
+          <span>You: <strong id="ttt-score-x">0</strong></span>
+          <span>Computer: <strong id="ttt-score-o">0</strong></span>
+          <span>Ties: <strong id="ttt-score-tie">0</strong></span>
+        </div>
+        <div class="game-controls">
+          <button class="pill-btn" onclick="tttReset()">New Round</button>
+          <button class="pill-btn ghost" onclick="tttResetScores()">Reset Score</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- MEMORY MATCH -->
+    <section id="memory">
+      <div class="section-header centered">
+        <span class="eyebrow">match the pairs</span>
+        <h2 class="section-title">Memory Game 🧠💕</h2>
+      </div>
+
+      <div class="note-card tilt-r">
+        <div class="memory-board" id="memory-board"></div>
+        <div class="memory-status" id="memory-status">Find every matching pair 💗</div>
+        <div class="game-controls">
+          <button class="pill-btn" onclick="memoryInit()">Shuffle & Restart</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- BUBBLE POP -->
+    <section id="bubbles">
+      <div class="section-header centered">
+        <span class="eyebrow">her favorite</span>
+        <h2 class="section-title">Bubble Pop 🫧</h2>
+      </div>
+
+      <div class="glass-card">
+        <div class="bubble-stage" id="bubble-stage">
+          <div class="bubble-hud">
+            <span>Popped: <strong id="bubble-score">0</strong></span>
+            <span>Time: <strong id="bubble-time">30</strong>s</span>
+          </div>
+          <div class="bubble-overlay" id="bubble-overlay">
+            <h3>Ready to pop some bubbles? 🫧</h3>
+            <p style="color: var(--text-muted); font-size: 0.88rem;">Tap as many as you can in 30 seconds</p>
+            <button class="pill-btn" onclick="bubbleStart()">Start Popping</button>
+          </div>
+        </div>
+        <div class="game-controls">
+          <button class="pill-btn ghost" onclick="bubbleStart()">Restart</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- BUBBLE WRAP -->
+    <section id="wrap">
+      <div class="section-header centered">
+        <span class="eyebrow">no timer, no pressure</span>
+        <h2 class="section-title">Bubble Wrap 💭</h2>
+      </div>
+
+      <div class="note-card tilt-l">
+        <div class="wrap-grid" id="wrap-grid"></div>
+        <div class="game-controls">
+          <button class="pill-btn ghost" onclick="wrapInit()">Fresh Sheet</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>go rest a little</p>
+  </footer>
+
+  <script>
+    /* MOBILE MENU */
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileNav = document.getElementById('mobile-nav');
+    menuToggle.addEventListener('click', () => {
+      mobileNav.classList.toggle('open');
+      menuToggle.textContent = mobileNav.classList.contains('open') ? '✕' : '☰';
+    });
+    mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      mobileNav.classList.remove('open');
+      menuToggle.textContent = '☰';
+    }));
+
+    /* ================= TIC TAC TOE (single player vs computer) ================= */
+    let tttCells = Array(9).fill(null);
+    let tttActive = true;
+    let tttBusy = false; // true while computer is "thinking"
+    let tttScores = { X: 0, O: 0, tie: 0 };
+    let tttDifficulty = 'easy'; // 'easy' | 'hard'
+
+    const HUMAN = 'X';
+    const COMPUTER = 'O';
+
+    const tttWins = [
+      [0,1,2],[3,4,5],[6,7,8],
+      [0,3,6],[1,4,7],[2,5,8],
+      [0,4,8],[2,4,6]
+    ];
+
+    function setDifficulty(level) {
+      tttDifficulty = level;
+      document.getElementById('mode-easy').classList.toggle('active', level === 'easy');
+      document.getElementById('mode-hard').classList.toggle('active', level === 'hard');
+      tttReset();
+    }
+
+    function tttRender() {
+      const board = document.getElementById('ttt-board');
+      board.innerHTML = '';
+      tttCells.forEach((val, i) => {
+        const cell = document.createElement('div');
+        cell.className = 'ttt-cell' + (val ? ' ' + val.toLowerCase() : '') + ((!tttActive || tttBusy || val) ? ' disabled' : '');
+        cell.textContent = val || '';
+        cell.onclick = () => tttPlay(i);
+        board.appendChild(cell);
+      });
+    }
+
+    function getWinner(cells) {
+      for (const line of tttWins) {
+        const [a, b, c] = line;
+        if (cells[a] && cells[a] === cells[b] && cells[a] === cells[c]) {
+          return { winner: cells[a], line };
+        }
+      }
+      if (cells.every(c => c)) return { winner: 'tie', line: null };
+      return null;
+    }
+
+    function tttPlay(i) {
+      if (!tttActive || tttBusy || tttCells[i]) return;
+      tttCells[i] = HUMAN;
+      tttRender();
+
+      const result = getWinner(tttCells);
+      if (result) {
+        finishTtt(result);
+        return;
+      }
+
+      // computer's turn
+      tttBusy = true;
+      document.getElementById('ttt-status').textContent = "Computer is thinking...";
+      tttRender();
+      setTimeout(computerMove, 550);
+    }
+
+    function computerMove() {
+      let move;
+      if (tttDifficulty === 'easy') {
+        move = easyMove();
+      } else {
+        move = bestMove();
+      }
+      if (move !== undefined && move !== null) {
+        tttCells[move] = COMPUTER;
+      }
+      tttBusy = false;
+      tttRender();
+
+      const result = getWinner(tttCells);
+      if (result) {
+        finishTtt(result);
+      } else {
+        document.getElementById('ttt-status').textContent = "Your turn — you're X";
+      }
+    }
+
+    function easyMove() {
+      // 60% random, 40% smart — gives Chaya a fighting chance
+      const empty = tttCells.map((v, i) => v ? null : i).filter(v => v !== null);
+      if (Math.random() < 0.6) {
+        return empty[Math.floor(Math.random() * empty.length)];
+      }
+      return bestMove();
+    }
+
+    function bestMove() {
+      let best = { score: -Infinity, index: null };
+      for (let i = 0; i < 9; i++) {
+        if (!tttCells[i]) {
+          tttCells[i] = COMPUTER;
+          const score = minimax(tttCells, 0, false);
+          tttCells[i] = null;
+          if (score > best.score) {
+            best = { score, index: i };
+          }
+        }
+      }
+      return best.index;
+    }
+
+    function minimax(cells, depth, isMaximizing) {
+      const result = getWinner(cells);
+      if (result) {
+        if (result.winner === COMPUTER) return 10 - depth;
+        if (result.winner === HUMAN) return depth - 10;
+        return 0;
+      }
+
+      if (isMaximizing) {
+        let best = -Infinity;
+        for (let i = 0; i < 9; i++) {
+          if (!cells[i]) {
+            cells[i] = COMPUTER;
+            best = Math.max(best, minimax(cells, depth + 1, false));
+            cells[i] = null;
+          }
+        }
+        return best;
+      } else {
+        let best = Infinity;
+        for (let i = 0; i < 9; i++) {
+          if (!cells[i]) {
+            cells[i] = HUMAN;
+            best = Math.min(best, minimax(cells, depth + 1, true));
+            cells[i] = null;
+          }
+        }
+        return best;
+      }
+    }
+
+    function finishTtt(result) {
+      tttActive = false;
+      if (result.winner === 'tie') {
+        document.getElementById('ttt-status').textContent = "It's a tie!";
+        tttScores.tie++;
+        document.getElementById('ttt-score-tie').textContent = tttScores.tie;
+      } else if (result.winner === HUMAN) {
+        document.getElementById('ttt-status').textContent = "You win! 🎉";
+        tttScores.X++;
+        document.getElementById('ttt-score-x').textContent = tttScores.X;
+        highlightWin(result.line);
+      } else {
+        document.getElementById('ttt-status').textContent = "Computer wins — try again!";
+        tttScores.O++;
+        document.getElementById('ttt-score-o').textContent = tttScores.O;
+        highlightWin(result.line);
+      }
+      tttRender();
+    }
+
+    function highlightWin(line) {
+      if (!line) return;
+      const cells = document.querySelectorAll('.ttt-cell');
+      line.forEach(i => cells[i].classList.add('win'));
+    }
+
+    function tttReset() {
+      tttCells = Array(9).fill(null);
+      tttActive = true;
+      tttBusy = false;
+      document.getElementById('ttt-status').textContent = "Your turn — you're X";
+      tttRender();
+    }
+
+    function tttResetScores() {
+      tttScores = { X: 0, O: 0, tie: 0 };
+      document.getElementById('ttt-score-x').textContent = 0;
+      document.getElementById('ttt-score-o').textContent = 0;
+      document.getElementById('ttt-score-tie').textContent = 0;
+      tttReset();
+    }
+
+    tttRender();
+
+    /* ================= MEMORY MATCH ================= */
+    const memoryEmojis = ['💖','🌸','⭐','🧸','🌙','🦋','🍓','☕'];
+    let memoryDeck = [];
+    let memoryFlipped = [];
+    let memoryMatchedCount = 0;
+    let memoryLock = false;
+
+    function memoryInit() {
+      const pairSet = [...memoryEmojis, ...memoryEmojis];
+      memoryDeck = pairSet.sort(() => Math.random() - 0.5);
+      memoryFlipped = [];
+      memoryMatchedCount = 0;
+      memoryLock = false;
+      document.getElementById('memory-status').textContent = 'Find every matching pair 💗';
+
+      const board = document.getElementById('memory-board');
+      board.innerHTML = '';
+      memoryDeck.forEach((emoji, i) => {
+        const card = document.createElement('div');
+        card.className = 'memory-card';
+        card.dataset.index = i;
+        card.dataset.emoji = emoji;
+        card.onclick = () => memoryFlip(i, card);
+        board.appendChild(card);
+      });
+    }
+
+    function memoryFlip(i, card) {
+      if (memoryLock || card.classList.contains('flipped') || card.classList.contains('matched')) return;
+
+      card.textContent = memoryDeck[i];
+      card.classList.add('flipped');
+      memoryFlipped.push({ i, card });
+
+      if (memoryFlipped.length === 2) {
+        memoryLock = true;
+        const [a, b] = memoryFlipped;
+        if (a.card.dataset.emoji === b.card.dataset.emoji) {
+          a.card.classList.add('matched');
+          b.card.classList.add('matched');
+          memoryMatchedCount++;
+          memoryFlipped = [];
+          memoryLock = false;
+          if (memoryMatchedCount === memoryEmojis.length) {
+            document.getElementById('memory-status').textContent = 'You matched them all! 🎉💕';
+          }
+        } else {
+          setTimeout(() => {
+            a.card.textContent = '';
+            b.card.textContent = '';
+            a.card.classList.remove('flipped');
+            b.card.classList.remove('flipped');
+            memoryFlipped = [];
+            memoryLock = false;
+          }, 700);
+        }
+      }
+    }
+
+    memoryInit();
+
+    /* ================= BUBBLE POP ================= */
+    let bubbleScore = 0;
+    let bubbleTimeLeft = 30;
+    let bubbleTimerInterval = null;
+    let bubbleSpawnInterval = null;
+    let bubbleRunning = false;
+
+    function bubbleStart() {
+      clearInterval(bubbleTimerInterval);
+      clearInterval(bubbleSpawnInterval);
+      const stage = document.getElementById('bubble-stage');
+      stage.querySelectorAll('.bubble, .pop-particle').forEach(el => el.remove());
+
+      bubbleScore = 0;
+      bubbleTimeLeft = 30;
+      document.getElementById('bubble-score').textContent = bubbleScore;
+      document.getElementById('bubble-time').textContent = bubbleTimeLeft;
+      document.getElementById('bubble-overlay').classList.add('hidden');
+      bubbleRunning = true;
+
+      bubbleSpawnInterval = setInterval(spawnBubble, 550);
+      bubbleTimerInterval = setInterval(() => {
+        bubbleTimeLeft--;
+        document.getElementById('bubble-time').textContent = bubbleTimeLeft;
+        if (bubbleTimeLeft <= 0) bubbleEnd();
+      }, 1000);
+    }
+
+    function spawnBubble() {
+      if (!bubbleRunning) return;
+      const stage = document.getElementById('bubble-stage');
+      const size = 30 + Math.random() * 40;
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble';
+      bubble.style.width = size + 'px';
+      bubble.style.height = size + 'px';
+      bubble.style.left = Math.random() * (stage.clientWidth - size) + 'px';
+      const duration = 3.5 + Math.random() * 2.5;
+      bubble.style.animationDuration = duration + 's';
+      bubble.style.setProperty('--drift', (Math.random() * 60 - 30) + 'px');
+
+      bubble.onclick = (e) => popBubble(bubble, e);
+      bubble.addEventListener('animationend', () => bubble.remove());
+
+      stage.appendChild(bubble);
+    }
+
+    function popBubble(bubble, e) {
+      if (!bubbleRunning) return;
+      const stage = document.getElementById('bubble-stage');
+      const rect = bubble.getBoundingClientRect();
+      const stageRect = stage.getBoundingClientRect();
+      const cx = rect.left - stageRect.left + rect.width / 2;
+      const cy = rect.top - stageRect.top + rect.height / 2;
+
+      for (let i = 0; i < 6; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'pop-particle';
+        const psize = 6 + Math.random() * 6;
+        particle.style.width = psize + 'px';
+        particle.style.height = psize + 'px';
+        particle.style.left = cx + 'px';
+        particle.style.top = cy + 'px';
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 30 + Math.random() * 30;
+        particle.style.setProperty('--px', Math.cos(angle) * dist + 'px');
+        particle.style.setProperty('--py', Math.sin(angle) * dist + 'px');
+        stage.appendChild(particle);
+        particle.addEventListener('animationend', () => particle.remove());
+      }
+
+      bubble.remove();
+      bubbleScore++;
+      document.getElementById('bubble-score').textContent = bubbleScore;
+    }
+
+    function bubbleEnd() {
+      bubbleRunning = false;
+      clearInterval(bubbleTimerInterval);
+      clearInterval(bubbleSpawnInterval);
+      const overlay = document.getElementById('bubble-overlay');
+      overlay.innerHTML = `
+        <h3>Time's up! You popped ${bubbleScore} 🫧</h3>
+        <p style="color: var(--text-muted); font-size: 0.88rem;">Nice job, feel any lighter?</p>
+        <button class="pill-btn" onclick="bubbleStart()">Play Again</button>
+      `;
+      overlay.classList.remove('hidden');
+    }
+
+    /* ================= BUBBLE WRAP ================= */
+    function wrapInit() {
+      const grid = document.getElementById('wrap-grid');
+      grid.innerHTML = '';
+      for (let i = 0; i < 42; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'wrap-cell';
+        cell.onclick = () => {
+          if (cell.classList.contains('popped')) return;
+          cell.classList.add('popped');
+        };
+        grid.appendChild(cell);
+      }
+    }
+    wrapInit();
+  </script>
+</body>
+</html>
