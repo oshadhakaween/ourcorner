@@ -10,7 +10,99 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Quicksand:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
+  <style>
+    #password-screen {
+        position: fixed;
+        inset: 0;
+        background: #0b0b0f;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 999999;
+    }
+
+    .password-box {
+        width: 90%;
+        max-width: 380px;
+        padding: 40px;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 20px;
+        backdrop-filter: blur(15px);
+        color: white;
+        box-sizing: border-box;
+    }
+
+    .password-box h1 {
+        margin-bottom: 10px;
+    }
+
+    .password-box p {
+        color: #aaa;
+    }
+
+    .password-box input {
+        width: 100%;
+        padding: 14px;
+        margin: 20px 0 10px;
+        box-sizing: border-box;
+        border: none;
+        border-radius: 10px;
+        outline: none;
+        font-size: 16px;
+    }
+
+    .password-box button {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        background: white;
+        color: black;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    #error {
+        color: #ff6b6b;
+        min-height: 20px;
+    }
+</style>
+  <script>
+    const correctPassword = "123456";
+
+    function checkPassword() {
+        const enteredPassword =
+            document.getElementById("password").value;
+
+        if (enteredPassword === correctPassword) {
+            document.getElementById("password-screen").style.display = "none";
+        } else {
+            document.getElementById("error").textContent =
+                "Incorrect password.";
+        }
+    }
+
+    document.getElementById("password").addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            checkPassword();
+        }
+    });
+</script>
 <body>
+
+  <div id="password-screen">
+    <div class="password-box">
+        <h1>🔐 Private Space</h1>
+        <p>Enter the password to continue</p>
+
+        <input type="password" id="password" placeholder="Enter password">
+        <button onclick="checkPassword()">Enter</button>
+
+        <p id="error"></p>
+    </div>
+</div>
 
   <!-- Floating Navigation -->
   <header>
