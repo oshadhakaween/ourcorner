@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>This Blooms For You</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{ --ink:#17121c; --ink2:#3d3745; --muted:#7a7484; --line:#eeebf2; --rose:#ff3d77; --rose-d:#e0245f; --rose-s:#ffe9f0;
+    --serif:'Instrument Serif',Georgia,serif; --sans:'Plus Jakarta Sans',system-ui,sans-serif; }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+  body{ font-family:var(--sans); color:var(--ink); background:#fff; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
+  .bg{ position:fixed; inset:0; z-index:-3; }
+  .bg-a{ background:#fff; }
+  .bg-b{ z-index:-2; background:radial-gradient(ellipse at 50% 30%, #fff 0%, var(--rose-s) 70%, #ffd3e1 100%); opacity:0; }
+  #flower3d{ position:fixed; inset:0; width:100%; height:100%; z-index:-1; display:block; pointer-events:none; }
+
+  .back-home{ position:fixed; top:max(1rem, env(safe-area-inset-top)); left:1rem; z-index:30; display:inline-flex; align-items:center; gap:.5rem;
+    font-size:.82rem; font-weight:700; color:var(--ink); padding:.6rem 1.1rem; border:1px solid var(--line); border-radius:999px;
+    background:rgba(255,255,255,.85); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); text-decoration:none; box-shadow:0 10px 24px -14px rgba(23,18,28,.3); transition:transform .25s; }
+  .back-home:hover{ transform:translateX(-3px); }
+
+  .thread{ position:fixed; right:18px; top:12%; height:76%; width:3px; border-radius:3px; background:var(--line); z-index:20; }
+  .thread-dot{ position:absolute; left:50%; top:0; width:13px; height:13px; border-radius:50%; background:var(--rose); transform:translate(-50%,-50%); box-shadow:0 0 0 5px rgba(255,61,119,.18); }
+  @media (max-width:720px){ .thread{ display:none; } }
+
+  .intro{ height:100vh; height:100svh; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding:19vh 24px 0; text-align:center; position:relative; }
+  .eyebrow{ font-size:.72rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--rose-d); margin-bottom:18px; }
+  .intro h1{ font-family:var(--serif); font-weight:400; font-size:clamp(3.2rem,11vw,7rem); line-height:.92; letter-spacing:-.02em; }
+  .intro h1 em{ color:var(--rose); }
+  .intro p{ margin-top:18px; max-width:32ch; color:var(--muted); font-size:1.05rem; }
+  .scroll-hint{ position:absolute; bottom:34px; display:flex; flex-direction:column; align-items:center; gap:8px; font-size:.68rem; font-weight:700; letter-spacing:.24em; text-transform:uppercase; color:var(--muted); transition:opacity .4s ease; }
+  .scroll-hint .arrow{ width:1.5px; height:34px; background:var(--line); position:relative; overflow:hidden; }
+  .scroll-hint .arrow::after{ content:""; position:absolute; left:-1px; top:-40px; width:3.5px; height:16px; background:var(--rose); border-radius:3px; animation:drip 1.8s ease-in-out infinite; }
+  @keyframes drip{ 0%{ top:-16px; opacity:0; } 20%{ opacity:1; } 100%{ top:36px; opacity:0; } }
+
+  .story{ position:relative; height:600vh; }
+  .stage{ position:sticky; top:0; height:100vh; height:100svh; width:100%; overflow:hidden; }
+  .panels{ position:absolute; left:50%; bottom:max(3.5vh, env(safe-area-inset-bottom, 14px)); transform:translateX(-50%); width:min(92vw,580px); height:clamp(140px,24vh,190px); }
+  .panel{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:14px 24px; border-radius:26px; opacity:0; pointer-events:none;
+    background:rgba(255,255,255,.88); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); border:1px solid var(--line); box-shadow:0 30px 60px -30px rgba(255,61,119,.4); }
+  .panel .roman{ font-size:.7rem; font-weight:800; letter-spacing:.18em; color:var(--rose-d); margin-bottom:8px; text-transform:uppercase; }
+  .panel p{ font-family:var(--serif); font-size:clamp(1.25rem,3.6vw,1.75rem); line-height:1.25; color:var(--ink); }
+
+  .finale{ min-height:100vh; min-height:100svh; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; text-align:center; padding:12vh 20px 7vh; position:relative; }
+  .finale-card{ width:min(100%,580px); padding:clamp(1.6rem,5vw,2.6rem); border-radius:32px; background:rgba(255,255,255,.92); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); border:1px solid var(--line); box-shadow:0 40px 80px -36px rgba(255,61,119,.5); }
+  .finale .eyebrow{ margin-bottom:14px; }
+  .finale h2{ font-family:var(--serif); font-weight:400; font-size:clamp(2rem,6.4vw,3.2rem); color:var(--ink); line-height:1.05; }
+  .finale h2 em{ color:var(--rose); }
+  .finale .names{ margin-top:20px; font-family:var(--serif); font-style:italic; font-size:1.3rem; color:var(--ink2); }
+  .replay{ margin-top:26px; border:0; background:var(--rose); color:#fff; font-family:var(--sans); font-weight:700; font-size:.92rem; padding:14px 28px; border-radius:999px; cursor:pointer; box-shadow:0 14px 28px -12px rgba(255,61,119,.7); transition:transform .25s; }
+  .replay:hover{ transform:translateY(-3px); }
+
+  .no3d{ display:none; position:fixed; top:34%; left:0; right:0; text-align:center; font-size:clamp(5rem,26vw,9rem); z-index:-1; }
+  .no-webgl .no3d{ display:block; }
+  @media (prefers-reduced-motion:reduce){ html{ scroll-behavior:auto; } .scroll-hint .arrow::after{ animation:none; } }
+</style>
+</head>
+<body>
+
+  <div class="bg bg-a"></div>
+  <div class="bg bg-b" id="bgB"></div>
+  <canvas id="flower3d" aria-hidden="true"></canvas>
+  <div class="no3d" aria-hidden="true">🌸</div>
+
+  <a href="index.html" class="back-home">← back home</a>
+  <div class="thread"><div class="thread-dot" id="threadDot"></div></div>
+
+  <section class="intro">
+    <div class="eyebrow">a small thing, growing</div>
+    <h1>This blooms<br><em>for you</em></h1>
+    <p>Scroll slowly. Some things are worth watching unfold.</p>
+    <div class="scroll-hint" id="scrollHint"><span>scroll</span><span class="arrow"></span></div>
+  </section>
+
+  <div class="story" id="story">
+    <div class="stage">
+      <div class="panels" id="panels">
+        <div class="panel" data-i="0"><div class="roman">I. the seed</div><p>Every story starts small &mdash; a seed, a hello, a first spark I didn&rsquo;t know would grow into this.</p></div>
+        <div class="panel" data-i="1"><div class="roman">II. the reach</div><p>Then it kept reaching for you, quietly, the way a stem reaches for light without needing to be told.</p></div>
+        <div class="panel" data-i="2"><div class="roman">III. the waiting</div><p>Somewhere between then and now, it became something I couldn&rsquo;t stop noticing &mdash; soft, closed, about to open.</p></div>
+        <div class="panel" data-i="3"><div class="roman">IV. the opening</div><p>Petal by petal, it stopped holding back. That&rsquo;s what you did to me, too.</p></div>
+        <div class="panel" data-i="4"><div class="roman">V. the bloom</div><p>Wide open now. Nothing left folded away.</p></div>
+        <div class="panel" data-i="5"><div class="roman">VI. the meaning</div><p>This is what it looks like when something is loved into growing. This is what you did.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <section class="finale">
+    <div class="finale-card">
+      <div class="eyebrow">Dewmini Sandachaya</div>
+      <h2>I love you, and I&rsquo;m so glad I get to keep <em>watching this bloom.</em></h2>
+      <div class="names">with all of it &mdash; Oshadha Bandara</div>
+      <button class="replay" id="replayBtn">watch it bloom again</button>
+    </div>
+  </section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  'use strict';
+
+  var story = document.getElementById('story');
+  var panels = [].slice.call(document.querySelectorAll('.panel'));
+  var bgB = document.getElementById('bgB');
+  var threadDot = document.getElementById('threadDot');
+  var scrollHint = document.getElementById('scrollHint');
+  var canvas = document.getElementById('flower3d');
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var THREE = window.THREE;
+
+  var clamp = function(v,a,b){ return Math.min(Math.max(v,a),b); };
+  var lerp = function(a,b,t){ return a + (b-a)*t; };
+  var sm = function(x){ x = clamp(x,0,1); return x*x*(3-2*x); };
+  var easeOut = function(x){ x = clamp(x,0,1); return 1 - Math.pow(1-x,3); };
+
+  /* ---------- scroll progress ---------- */
+  var target = 0, cur = 0;
+  function readScroll(){
+    var rect = story.getBoundingClientRect();
+    var total = story.offsetHeight - window.innerHeight;
+    target = total > 0 ? clamp(-rect.top / total, 0, 1) : 0;
+  }
+  window.addEventListener('scroll', readScroll, { passive:true });
+  window.addEventListener('resize', readScroll);
+  readScroll();
+
+  /* ---------- UI driven by progress ---------- */
+  var stageCount = panels.length;
+  function updateUI(p){
+    bgB.style.opacity = p;
+    threadDot.style.top = (p * 100) + '%';
+    scrollHint.style.opacity = p > 0.03 ? 0 : 1;
+    panels.forEach(function(panel){
+      var i = Number(panel.dataset.i);
+      var center = (i + 0.5) / stageCount;
+      var dist = Math.abs(p - center) * stageCount;
+      var o = clamp(1 - dist, 0, 1);
+      panel.style.opacity = o;
+      panel.style.transform = 'translateY(' + ((1 - o) * 14) + 'px)';
+    });
+  }
+
+  document.getElementById('replayBtn').addEventListener('click', function(){
+    window.scrollTo({ top:0, behavior:'smooth' });
+  });
+
+  /* ---------- WebGL ---------- */
+  var renderer;
+  try {
+    if (!THREE) throw new Error('no three');
+    renderer = new THREE.WebGLRenderer({ canvas:canvas, antialias:true, alpha:true });
+  } catch (e) {
+    document.body.classList.add('no-webgl');
+    (function loop(){ cur += (target-cur)*0.2; updateUI(cur); requestAnimationFrame(loop); })();
+    return;
+  }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setClearColor(0x000000, 0);
+
+  var FOV = 40;
+  var tanH = Math.tan(FOV * Math.PI / 360);
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(FOV, 1, 0.1, 100);
+
+  scene.add(new THREE.HemisphereLight(0xffffff, 0xf3c6d8, 0.95));
+  var sun = new THREE.DirectionalLight(0xffffff, 0.85);
+  sun.position.set(3, 7, 6);
+  scene.add(sun);
+  var rim = new THREE.PointLight(0xffa6c9, 0.9, 30);
+  scene.add(rim);
+
+  var plant = new THREE.Group();
+  scene.add(plant);
+
+  /* soft round textures */
+  function radialTexture(stops){
+    var c = document.createElement('canvas');
+    c.width = c.height = 128;
+    var g = c.getContext('2d');
+    var gr = g.createRadialGradient(64,64,0,64,64,64);
+    stops.forEach(function(s){ gr.addColorStop(s[0], s[1]); });
+    g.fillStyle = gr;
+    g.fillRect(0,0,128,128);
+    return new THREE.CanvasTexture(c);
+  }
+
+  /* ground shadow + seed */
+  var ground = new THREE.Mesh(
+    new THREE.PlaneGeometry(4.2, 4.2),
+    new THREE.MeshBasicMaterial({ map: radialTexture([[0,'rgba(120,40,70,.35)'],[1,'rgba(120,40,70,0)']]), transparent:true, depthWrite:false })
+  );
+  ground.rotation.x = -Math.PI/2;
+  ground.position.y = -0.01;
+  plant.add(ground);
+
+  var seed = new THREE.Mesh(
+    new THREE.SphereGeometry(0.16, 16, 12),
+    new THREE.MeshStandardMaterial({ color:0x8a5a44, roughness:0.7 })
+  );
+  seed.scale.set(1, 0.7, 0.85);
+  seed.position.y = 0.08;
+  plant.add(seed);
+
+  /* stem — a tube that "draws" itself upward */
+  var STEM_H = 4;
+  var curve = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(0,0,0),
+    new THREE.Vector3(0.16,1.3,0.05),
+    new THREE.Vector3(-0.12,2.7,-0.06),
+    new THREE.Vector3(0,STEM_H,0)
+  ]);
+  var stemGeo = new THREE.TubeGeometry(curve, 160, 0.075, 10, false);
+  var stemIdx = stemGeo.index.count;
+  var stemMat = new THREE.MeshStandardMaterial({ color:0x5f8a5c, roughness:0.7 });
+  var stem = new THREE.Mesh(stemGeo, stemMat);
+  stemGeo.setDrawRange(0, 0);
+  plant.add(stem);
+
+  /* leaves */
+  function makeLeafGeometry(){
+    var s = new THREE.Shape();
+    s.moveTo(0,0);
+    s.bezierCurveTo(0.25,0.3,0.75,0.34,1.2,0);
+    s.bezierCurveTo(0.75,-0.34,0.25,-0.3,0,0);
+    var g = new THREE.ShapeGeometry(s, 14);
+    var pos = g.attributes.position;
+    for (var i=0;i<pos.count;i++){
+      var x = pos.getX(i);
+      pos.setY(i, pos.getY(i) - 0.18*x*x);
+      pos.setZ(i, Math.abs(pos.getY(i)+0.18*x*x) * 0.35);
+    }
+    g.computeVertexNormals();
+    return g;
+  }
+  var leafGeo = makeLeafGeometry();
+  var leafMat = new THREE.MeshStandardMaterial({ color:0x7bab74, roughness:0.65, side:THREE.DoubleSide });
+  var leaves = [];
+  [[0.30, 0.55], [0.46, Math.PI + 0.45]].forEach(function(cfg){
+    var pivot = new THREE.Object3D();
+    pivot.position.copy(curve.getPointAt(cfg[0]));
+    pivot.rotation.y = cfg[1];
+    var leaf = new THREE.Mesh(leafGeo, leafMat);
+    leaf.rotation.z = 0.5;
+    pivot.add(leaf);
+    pivot.scale.setScalar(0.001);
+    plant.add(pivot);
+    leaves.push({ pivot:pivot, at:cfg[0] });
+  });
+
+  /* flower head */
+  function makePetalGeometry(len, wid){
+    var g = new THREE.PlaneGeometry(1, 1, 6, 12);
+    var pos = g.attributes.position;
+    var colors = new Float32Array(pos.count * 3);
+    var base = new THREE.Color(0xc9628b), mid = new THREE.Color(0xe8a6c1), tip = new THREE.Color(0xffe3ee), c = new THREE.Color();
+    for (var i=0;i<pos.count;i++){
+      var vx = pos.getX(i);
+      var vy = pos.getY(i) + 0.5;
+      var w = 0.06 + 0.94 * Math.sin(Math.PI * Math.pow(vy, 0.7));
+      var x = vx * w * wid;
+      var y = vy * len;
+      var z = -0.12 * vy * vy * len - Math.pow(vx*2, 2) * 0.1 * wid * w;
+      pos.setXYZ(i, x, y, z);
+      if (vy < 0.5) c.copy(base).lerp(mid, vy*2); else c.copy(mid).lerp(tip, (vy-0.5)*2);
+      colors[i*3] = c.r; colors[i*3+1] = c.g; colors[i*3+2] = c.b;
+    }
+    g.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    g.computeVertexNormals();
+    return g;
+  }
+
+  var head = new THREE.Group();
+  plant.add(head);
+
+  var greenMat = new THREE.MeshStandardMaterial({ color:0x6e8f6b, roughness:0.7 });
+  var receptacle = new THREE.Mesh(new THREE.SphereGeometry(0.2, 16, 12), greenMat);
+  receptacle.scale.set(1, 0.7, 1);
+  receptacle.position.y = -0.02;
+  head.add(receptacle);
+
+  var petalMat = new THREE.MeshStandardMaterial({
+    vertexColors:true, side:THREE.DoubleSide, roughness:0.55, metalness:0,
+    emissive:0x7a2a4a, emissiveIntensity:0.08
+  });
+  var rings = [
+    { n:8, len:1.55, wid:0.9,  open:1.30, off:0 },
+    { n:8, len:1.35, wid:0.82, open:0.95, off:Math.PI/8 },
+    { n:6, len:1.05, wid:0.68, open:0.55, off:0.3 }
+  ];
+  var petals = [];
+  rings.forEach(function(cfg, r){
+    var geo = makePetalGeometry(cfg.len, cfg.wid);
+    for (var k=0;k<cfg.n;k++){
+      var pivot = new THREE.Object3D();
+      pivot.rotation.y = cfg.off + k * (Math.PI*2 / cfg.n);
+      pivot.position.y = r * 0.02;
+      var mesh = new THREE.Mesh(geo, petalMat);
+      mesh.position.z = 0.03;
+      mesh.rotation.x = 0.1;
+      pivot.add(mesh);
+      head.add(pivot);
+      petals.push({ mesh:mesh, open:cfg.open, delay: r*0.16 + k*0.018, ph: Math.random()*6 });
+    }
+  });
+
+  var stamen = new THREE.Group();
+  stamen.position.y = 0.1;
+  head.add(stamen);
+  var goldMat = new THREE.MeshStandardMaterial({ color:0xd8b26b, emissive:0xf2c46d, emissiveIntensity:0.35, roughness:0.5 });
+  var core = new THREE.Mesh(new THREE.SphereGeometry(0.2, 20, 14), new THREE.MeshStandardMaterial({ color:0xffe9a8, emissive:0xf2c46d, emissiveIntensity:0.35, roughness:0.5 }));
+  core.scale.set(1, 0.6, 1);
+  stamen.add(core);
+  for (var s=0;s<14;s++){
+    var a = s/14 * Math.PI*2, rr = 0.24 + Math.random()*0.1;
+    var dot = new THREE.Mesh(new THREE.SphereGeometry(0.035, 8, 6), goldMat);
+    dot.position.set(Math.cos(a)*rr, 0.06 + Math.random()*0.08, Math.sin(a)*rr);
+    stamen.add(dot);
+  }
+
+  /* glow halo behind the bloom */
+  var halo = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: radialTexture([[0,'rgba(255,190,215,.9)'],[0.5,'rgba(255,170,205,.35)'],[1,'rgba(255,170,205,0)']]),
+    transparent:true, depthWrite:false, opacity:0
+  }));
+  halo.scale.set(7, 7, 1);
+  scene.add(halo);
+
+  /* sparkles */
+  var SP = window.innerWidth < 760 ? 40 : 80;
+  var spPos = new Float32Array(SP*3);
+  for (var q=0;q<SP;q++){
+    var th = Math.random()*Math.PI*2, ph = Math.acos(2*Math.random()-1), rad = 1.8 + Math.random()*2;
+    spPos[q*3]   = rad*Math.sin(ph)*Math.cos(th);
+    spPos[q*3+1] = rad*Math.cos(ph)*0.8;
+    spPos[q*3+2] = rad*Math.sin(ph)*Math.sin(th);
+  }
+  var spGeo = new THREE.BufferGeometry();
+  spGeo.setAttribute('position', new THREE.BufferAttribute(spPos, 3));
+  var spMat = new THREE.PointsMaterial({
+    size:0.2, map: radialTexture([[0,'rgba(255,255,255,1)'],[0.35,'rgba(255,230,160,.95)'],[1,'rgba(255,230,160,0)']]),
+    color:0xf2c46d, transparent:true, opacity:0, depthWrite:false
+  });
+  var sparkles = new THREE.Points(spGeo, spMat);
+  scene.add(sparkles);
+
+  /* ---------- pointer / tilt ---------- */
+  var mouse = { x:0, y:0, tx:0, ty:0 };
+  window.addEventListener('pointermove', function(e){
+    mouse.tx = (e.clientX / window.innerWidth) * 2 - 1;
+    mouse.ty = (e.clientY / window.innerHeight) * 2 - 1;
+  }, { passive:true });
+  window.addEventListener('deviceorientation', function(e){
+    if (e.gamma == null || e.beta == null) return;
+    mouse.tx = clamp(e.gamma / 30, -1, 1);
+    mouse.ty = clamp((e.beta - 45) / 30, -1, 1);
+  }, { passive:true });
+
+  /* ---------- sizing ---------- */
+  var W = window.innerWidth, H = window.innerHeight;
+  function resize(){
+    W = window.innerWidth; H = window.innerHeight;
+    renderer.setSize(W, H, false);
+    camera.aspect = W / H;
+    camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  /* ---------- the loop ---------- */
+  var tmp = new THREE.Vector3();
+  function frame(now){
+    requestAnimationFrame(frame);
+    var t = now / 1000;
+    var anim = reduce ? 0 : 1;
+
+    cur = reduce ? target : cur + (target - cur) * 0.12;
+    if (Math.abs(target - cur) < 0.0002) cur = target;
+    var p = cur;
+    updateUI(p);
+
+    mouse.x += (mouse.tx - mouse.x) * 0.06;
+    mouse.y += (mouse.ty - mouse.y) * 0.06;
+
+    var stemP = sm(clamp(p / 0.35, 0, 1));
+    var leafP = clamp((p - 0.18) / 0.27, 0, 1);
+    var bloomP = clamp((p - 0.40) / 0.50, 0, 1);
+    var glowP = clamp((p - 0.75) / 0.20, 0, 1);
+
+    /* seed fades as the stem starts */
+    seed.scale.setScalar(Math.max(0.001, 1 - sm(p / 0.08)));
+
+    /* stem grows */
+    stemGeo.setDrawRange(0, Math.floor(stemIdx * stemP / 6) * 6);
+    var tip = curve.getPointAt(Math.max(stemP, 0.002));
+
+    /* leaves */
+    leaves.forEach(function(l, i){
+      var lp = easeOut(clamp(leafP * 1.2 - i * 0.2, 0, 1));
+      var visible = stemP >= l.at;
+      l.pivot.scale.setScalar(visible ? Math.max(0.001, lp) : 0.001);
+      l.pivot.rotation.z = Math.sin(t * 0.9 + i) * 0.03 * anim;
+    });
+
+    /* head rides the tip */
+    head.position.copy(tip);
+    var appear = sm(clamp((p - 0.05) / 0.25, 0, 1));
+    var grow = 0.5 + 0.5 * sm(p / 0.7);
+    head.scale.setScalar(Math.max(0.001, appear * grow));
+    head.rotation.x = 0.45 * sm(bloomP);
+
+    /* petals open one by one */
+    petals.forEach(function(pt){
+      var e = easeOut(clamp((bloomP - pt.delay) / 0.5, 0, 1));
+      pt.mesh.rotation.x = lerp(0.1, pt.open, e) + Math.sin(t * 1.3 + pt.ph) * 0.025 * e * anim;
+    });
+    stamen.scale.setScalar(Math.max(0.001, sm(clamp((bloomP - 0.35) / 0.5, 0, 1))));
+
+    /* sway */
+    plant.rotation.y = Math.sin(t * 0.3) * 0.3 * anim + mouse.x * 0.45;
+    plant.rotation.z = Math.sin(t * 0.5) * 0.015 * anim;
+
+    /* halo + sparkles follow the bloom */
+    var hy = tip.y + 0.3 * head.scale.x;
+    halo.position.set(tip.x, hy, -0.9);
+    halo.material.opacity = glowP * 0.55;
+    sparkles.position.set(tip.x, hy, 0);
+    sparkles.rotation.y = t * 0.15 * anim;
+    spMat.opacity = glowP * (0.65 + 0.3 * Math.sin(t * 2.6 * anim));
+    rim.position.set(2, hy + 1, 4);
+
+    /* camera framing */
+    var e2 = sm(p);
+    var dist = lerp(9.2, 7.2, e2);
+    var minDist = 2.2 / (tanH * camera.aspect);
+    dist = Math.max(dist, minDist);
+    var ty = lerp(1.9, 3.1, e2);
+    camera.position.set(mouse.x * 0.6, ty + dist * 0.28 - mouse.y * 0.3, dist);
+    camera.lookAt(0, ty, 0);
+
+    renderer.render(scene, camera);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+
+</body>
+</html>

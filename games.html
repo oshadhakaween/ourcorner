@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <title>The Arcade 🎮 — Our Corner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="games.css">
+</head>
+<body>
+  <div class="wash" aria-hidden="true"></div>
+
+  <header class="top">
+    <div class="top-in">
+      <a href="index.html" class="brand"><span class="dot">♥</span><b>Oshadha &amp; Chaya</b></a>
+      <nav class="nav" aria-label="Pages">
+        <a href="index.html">Home</a>
+        <a href="flower.html">Bloom</a>
+        <a href="games.html" class="cta active">Arcade 🎮</a>
+      </nav>
+      <span class="top-end"></span>
+    </div>
+  </header>
+
+  <nav class="dock" aria-label="Quick navigation">
+    <a href="index.html"><span>🏡</span>Home</a>
+    <a href="flower.html"><span>🌷</span>Bloom</a>
+    <a href="games.html" class="active"><span>🎮</span>Arcade</a>
+  </nav>
+
+  <!-- LOBBY -->
+  <div id="lobby-view">
+    <section class="arc-hero">
+      <div class="wrap">
+        <span class="eyebrow">feeling stressed? come play</span>
+        <h1 class="h1">The <em>Arcade</em></h1>
+        <p class="lead">Eight little games made for one person. Pick one, breathe out, and let your shoulders drop.</p>
+        <div class="arc-tools">
+          <button class="btn rose" id="surprise">🎲 Surprise me</button>
+          <a href="index.html" class="btn ghost">← Back home</a>
+        </div>
+      </div>
+    </section>
+    <section style="padding-top:1.5rem">
+      <div class="wrap"><div class="lobby" id="lobby"></div></div>
+    </section>
+  </div>
+
+  <!-- STAGE -->
+  <div id="stage-view" hidden>
+    <section class="stage-sec">
+      <div class="wrap">
+        <div class="stage-bar">
+          <button class="btn ghost icon" id="back" aria-label="Back to all games">←</button>
+          <h2 id="stage-title">Game</h2>
+          <div class="score" id="stage-score"></div>
+        </div>
+        <div class="stage-body" id="stage"></div>
+      </div>
+    </section>
+  </div>
+
+  <script src="ui.js"></script>
+  <script src="games.js"></script>
+</body>
+</html>
