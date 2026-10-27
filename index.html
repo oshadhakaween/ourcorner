@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <title>Our Private Corner 💕</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    /* lock the page until the password is entered (remembered for this browser session) */
+    try { if (sessionStorage.getItem('oc_unlocked') !== '1') document.documentElement.classList.add('locked'); }
+    catch (e) { document.documentElement.classList.add('locked'); }
+  </script>
+</head>
+<body>
+  <div class="wash" aria-hidden="true"></div>
+  <canvas id="world" aria-hidden="true"></canvas>
+  <div class="topbar-line" aria-hidden="true"></div>
+
+  <!-- Password gate -->
+  <div id="gate">
+    <div class="gate-card glass" id="gate-card">
+      <div class="gate-heart" aria-hidden="true">🤍</div>
+      <h1>Our private corner</h1>
+      <p>Only for one person. Enter the password.</p>
+      <div class="gate-row">
+        <input type="password" id="password" placeholder="password" autocomplete="off" aria-label="Password">
+        <button class="btn rose" id="gate-btn">Enter</button>
+      </div>
+      <div id="error" role="alert"></div>
+    </div>
+  </div>
+
+  <!-- Top bar -->
+  <header class="top">
+    <div class="top-in">
+      <a href="#hero" class="pill-ui brand"><span class="dot">♥</span><b>Oshadha &amp; Chaya</b></a>
+      <div class="top-r">
+        <a href="flower.html" class="pill-ui hide-m">Bloom 🌷</a>
+        <a href="games.html" class="pill-ui hot hide-m">Arcade 🎮</a>
+        <button class="pill-ui" id="menu-btn" aria-label="Menu" aria-expanded="false"><span class="menu-ico"><i></i><i></i></span>Menu</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Menu sheet -->
+  <nav class="sheet" id="sheet" aria-label="Chapters">
+    <a href="#hero" style="--i:0"><small>01</small>Hello</a>
+    <a href="#us" style="--i:1"><small>02</small>Days in love</a>
+    <a href="#story" style="--i:2"><small>03</small>Our story</a>
+    <a href="#vault" style="--i:3"><small>04</small>Photo vault</a>
+    <a href="#calm" style="--i:4"><small>05</small>Breathe</a>
+    <a href="#letters" style="--i:5"><small>06</small>Letters</a>
+    <a href="#tales" style="--i:6"><small>07</small>Fairy tales</a>
+    <a href="#arcade" style="--i:7"><small>08</small>Arcade</a>
+    <a href="games.html" style="--i:8"><small>🎮</small>Play now →</a>
+    <a href="flower.html" style="--i:9"><small>🌷</small>Watch it bloom →</a>
+  </nav>
+
+  <!-- chapter rail / mini pill -->
+  <div class="rail-dots" id="rail-dots" aria-label="Chapters"></div>
+  <div class="chap-pill" aria-hidden="true"><b id="chap-no">01</b><span id="chap-name">Hello</span><i></i></div>
+  <a href="games.html" class="fab" aria-label="Open the arcade">🎮</a>
+
+  <main>
+    <!-- 01 · HERO -->
+    <section class="stage hero tall-m" id="hero" data-stage data-obj="right" data-chapter="Hello" data-emoji="💖" data-orbit="0.35">
+      <div class="wrap" style="width:min(var(--maxw),100% - 2.4rem)">
+        <div class="col">
+          <span class="eyebrow">a little world we keep, just for us</span>
+          <h1 class="h1"><span><b>Oshadha</b></span><span><b><span class="grad" style="display:inline;overflow:visible">&amp; Chaya</span></b></span></h1>
+          <p class="lead">Every memory, every promise and every small silly thing — saved in one soft, glowing corner of the internet. Scroll, and fly through it.</p>
+          <div class="chips"><span class="chip">💞 Together since <b>April 12, 2026</b></span></div>
+          <div class="hero-cta">
+            <a href="flower.html" class="btn rose">Watch it bloom 🌸</a>
+            <a href="games.html" class="btn ghost">Feeling stressed? Play a game 🎮</a>
+          </div>
+        </div>
+      </div>
+      <div class="badge" aria-hidden="true">
+        <svg viewBox="0 0 128 128"><defs><path id="circ" d="M64,64 m-48,0 a48,48 0 1,1 96,0 a48,48 0 1,1 -96,0"/></defs><text><textPath href="#circ">scroll down • our story • scroll down • our story •</textPath></text></svg>
+        <span>↓</span>
+      </div>
+    </section>
+
+    <!-- 02 · DAYS IN LOVE -->
+    <section class="stage tall-m" id="us" data-stage data-obj="left" data-chapter="Days in love" data-emoji="🕰️" data-orbit="0.5">
+      <div class="wrap">
+        <div class="col r">
+          <div class="glass pad reveal" data-tilt="3">
+            <span class="eyebrow">counting quietly</span>
+            <p class="muted small" style="margin:.8rem 0 .2rem">Every second, still adding up — since April 12, 2026</p>
+            <div class="days-big"><span class="num" id="days">0</span><span class="unit">days</span></div>
+            <div class="hms">
+              <div><b id="hours">0</b><span>Hours</span></div>
+              <div><b id="minutes">0</b><span>Minutes</span></div>
+              <div><b id="seconds">0</b><span>Seconds</span></div>
+            </div>
+            <div class="bdays">
+              <div class="bd s"><small>His birthday</small><strong>Oshadha</strong><span>Aug 22, 2006</span></div>
+              <div class="bd b"><small>Her birthday</small><strong>Chaya</strong><span>May 16, 2007</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 · OUR STORY -->
+    <section class="stage" id="story" data-stage data-obj="right" data-chapter="Our story" data-emoji="⛰️" data-orbit="1.3">
+      <div class="wrap">
+        <div class="col">
+          <div class="sec-head reveal">
+            <span class="eyebrow">how we got here</span>
+            <h2 class="h2">Our <span class="grad">story</span></h2>
+          </div>
+          <div class="story-list">
+
+            <article class="sc3 scrub" data-scrub><span class="no">01</span>
+              <span class="date">April 12, 2026</span>
+              <h3>First Meet ✨</h3>
+              <p>Do you remember that date? In a busy, rushing town, you saw me as a driver... but I saw you first inside Keells.</p>
+            </article>
+
+            <article class="sc3 scrub" data-scrub><span class="no">02</span>
+              <span class="date">Shortly After</span>
+              <h3>How It Started ✨</h3>
+              <p>You texted me from your brother's phone. Who could have guessed that a simple text would bring us this far?</p>
+            </article>
+
+            <article class="sc3 scrub" data-scrub><span class="no">03</span>
+              <span class="date">April 20, 2026</span>
+              <h3>I Love You 💕</h3>
+              <p>I said 'I love you' first. I know it was just an ordinary confession—sorry for that, but I meant every word.</p>
+            </article>
+
+            <article class="sc3 scrub" data-scrub><span class="no">04</span>
+              <span class="date">Unforgettable Moments</span>
+              <h3>Special Memories ✨</h3>
+              <ul>
+                <li>Carrying you down from the mountain.</li>
+                <li>Purchasing a water bottle just for you.</li>
+                <li>Every little smile and quiet laugh shared along the way.</li>
+              </ul>
+            </article>
+
+            <article class="sc3 scrub" data-scrub><span class="no">05</span>
+              <span class="date">Special Gifts</span>
+              <h3>Tokens of Love 🎁</h3>
+              <ul>
+                <li>I gifted you a breathing teddy bear — the first gift I ever gave to a girl.</li>
+                <li>I built and published my very first website on the web just to wish you a Happy Birthday.</li>
+              </ul>
+            </article>
+
+            <article class="sc3 scrub" data-scrub><span class="no">06</span>
+              <span class="date">Her 19th Birthday &amp; Beyond</span>
+              <h3>From My Heart 🤍</h3>
+              <p>I'm truly sorry for the times I hurt you, especially for making you cry on your 19th birthday. I promise to keep growing, caring for you, and making things right every single day.</p>
+            </article>
+
+            <article class="sc3 scrub" data-scrub><span class="no">07</span>
+              <span class="date">29th of July 2026</span>
+              <h3>After a while</h3>
+              <p>Its been a while, right darling? Yeah it was, We both were busy since our exams. i Suddenly decided to skip the upcomming exam. So i got time to update our web again. Mmmm, There were soo many barriers for last few weeks.</p>
+              <p>Aha, I forgot mention that, We got a chance to meet. It was a woderfull week for me. I still remember that day i bring you a red teddy. You pinched my ear, we enjoyed a small ride too. It was a wonderfull day for me after a while. I still remember those days at night.</p>
+            </article>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 · PHOTO VAULT (3D tunnel) -->
+    <section class="vault" id="vault" data-stage data-obj="left" data-chapter="Photo vault" data-emoji="🧸" data-orbit="0.4">
+      <div class="vault-stick">
+        <div class="vault-title">
+          <span class="eyebrow">frozen little moments</span>
+          <h2 class="h2">Photo <span class="grad">vault</span></h2>
+          <p class="lead small">Keep scrolling — fly through our favourite frames.</p>
+        </div>
+        <div class="tunnel">
+          <figure class="tframe"><div class="ph">📷<img src="img1.jpg" alt="First meet" loading="lazy" onerror="this.remove()"></div><figcaption class="cap">First Meet</figcaption></figure>
+          <figure class="tframe"><div class="ph">⛰️<img src="img2.jpg" alt="Mountain hike" loading="lazy" onerror="this.remove()"></div><figcaption class="cap">Mountain Hike ⛰️</figcaption></figure>
+          <figure class="tframe"><div class="ph">🧸<img src="img3.jpg" alt="Teddy" loading="lazy" onerror="this.remove()"></div><figcaption class="cap">🧸</figcaption></figure>
+          <figure class="tframe"><div class="ph">😊<img src="img4.jpg" alt="Favorite smile" loading="lazy" onerror="this.remove()"></div><figcaption class="cap">Favorite Smile</figcaption></figure>
+          <figure class="tframe"><div class="ph">🤍<img src="img5.jpg" alt="Beautiful soles in a frame" loading="lazy" onerror="this.remove()"></div><figcaption class="cap">Beautiful soles in a frame</figcaption></figure>
+        </div>
+        <div class="vault-count" id="vault-count"><b>1</b> / 5</div>
+      </div>
+    </section>
+
+    <!-- 05 · BREATHE -->
+    <section class="stage tall-m" id="calm" data-stage data-obj="right" data-chapter="Breathe" data-emoji="🫧" data-orbit="0.4">
+      <div class="wrap">
+        <div class="col">
+          <div class="glass pad breathe breathe-card reveal" id="breath-box">
+            <span class="eyebrow">take a moment</span>
+            <h2 class="h2" style="font-size:clamp(2.2rem,5.5vw,3.6rem)">Breathe <span class="grad">with me</span></h2>
+            <p class="muted">Whenever you feel anxious or overwhelmed, tap the heart to breathe together.</p>
+            <div class="orb-wrap">
+              <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+              <button class="orb" id="breath-btn" aria-label="Start breathing exercise">💖</button>
+            </div>
+            <div id="breath-status" aria-live="polite">Tap the heart to begin</div>
+            <div id="breath-note">"I am right here with you. Take things one breath at a time."</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 · LETTERS -->
+    <section class="stage" id="letters" data-stage data-obj="left" data-chapter="Letters" data-emoji="💌" data-orbit="0.4">
+      <div class="wrap">
+        <div class="col r">
+          <div class="sec-head reveal">
+            <span class="eyebrow">open when you need me</span>
+            <h2 class="h2">Read when I'm <span class="grad">busy</span></h2>
+          </div>
+          <div class="letters">
+            <div class="env reveal" tabindex="0" role="button" aria-expanded="false">
+              <div class="env-front">
+                <span class="env-flap"></span>
+                <span class="seal">♥</span>
+                <span class="tag">Read when you miss me</span>
+                <h3>A Soft Hug In Written Words</h3>
+                <span class="snip">Tap to open when you need a reminder of how much you mean to me...</span>
+              </div>
+              <div class="env-body"><div><p>Hey love, even when I am tied up with work or quiet, you never leave my mind. Take a deep breath, loosen your shoulders, and drink a bit of water. We will be with you forever! You are my little princess always! ❤️</p></div></div>
+            </div>
+
+            <div class="env reveal" tabindex="0" role="button" aria-expanded="false">
+              <div class="env-front">
+                <span class="env-flap"></span>
+                <span class="seal">♥</span>
+                <span class="tag">Read when you're overwhelmed</span>
+                <h3>You Are Safe &amp; Deeply Loved</h3>
+                <span class="snip">Tap to open when everything feels a little too fast...</span>
+              </div>
+              <div class="env-body"><div><p>Close your eyes for 5 seconds. Breathe in deeply... and slowly let it out. Whatever is stressing you right now is only temporary, but my support for you is permanent. You are doing amazing!</p></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 07 · TALES -->
+    <section class="stage" id="tales" data-stage data-obj="right" data-chapter="Fairy tales" data-emoji="📖" data-orbit="0.4">
+      <div class="wrap">
+        <div class="col">
+          <div class="sec-head reveal">
+            <span class="eyebrow">for the boring hours</span>
+            <h2 class="h2">Fairy tale <span class="grad">corner</span> 🏰</h2>
+          </div>
+          <div class="tales reveal">
+            <div class="tale-list" id="tale-list">
+              <button class="tale-btn active" data-file="story1.txt">The Disappearing Stars 🌟</button>
+              <button class="tale-btn" data-file="story2.txt">The Rose Garden</button>
+              <button class="tale-btn" data-file="story3.txt">The Boy who Saved a Seat</button>
+              <button class="tale-btn" data-file="story4.txt">The Truth</button>
+              <button class="tale-btn" data-file="story5.txt">Story 05</button>
+            </div>
+            <div class="page"><div id="tale-content"><div class="tale-loading">Select a story to read...</div></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 08 · ARCADE -->
+    <section class="stage tall-m" id="arcade" data-stage data-obj="left" data-chapter="Arcade" data-emoji="🎲" data-orbit="0.5">
+      <div class="wrap">
+        <div class="col r">
+          <div class="glass pad games-card reveal" data-tilt="3">
+            <span class="eyebrow">need to unwind?</span>
+            <h2 class="h2" style="font-size:clamp(2.2rem,5.5vw,3.6rem)">Sixteen tiny games, <span class="grad">one arcade</span></h2>
+            <p class="muted">Snake, 2048 with flowers, a flappy heart, a love quiz, scratch coupons and more — all made for one person.</p>
+            <div class="mq-wrap" aria-hidden="true">
+              <div class="marquee">
+                <span class="mq">⭕ Tic-Tac-Toe</span><span class="mq">🃏 Memory</span><span class="mq">🫧 Bubble Pop</span><span class="mq">🔴 Pop-It</span><span class="mq">🧺 Heart Catcher</span><span class="mq">🌷 2048 Garden</span><span class="mq">💌 Love Quiz</span><span class="mq">🎟️ Scratch</span>
+                <span class="mq">🐍 Snake</span><span class="mq">🧸 Whack-a-Teddy</span><span class="mq">💗 Heart Hop</span><span class="mq">🎹 Simon</span><span class="mq">🧩 Slide Puzzle</span><span class="mq">🎡 Wheel of Dates</span><span class="mq">🥠 Fortune Cookie</span><span class="mq">⚡ Quick Tap</span>
+                <span class="mq">⭕ Tic-Tac-Toe</span><span class="mq">🃏 Memory</span><span class="mq">🫧 Bubble Pop</span><span class="mq">🔴 Pop-It</span><span class="mq">🧺 Heart Catcher</span><span class="mq">🌷 2048 Garden</span><span class="mq">💌 Love Quiz</span><span class="mq">🎟️ Scratch</span>
+                <span class="mq">🐍 Snake</span><span class="mq">🧸 Whack-a-Teddy</span><span class="mq">💗 Heart Hop</span><span class="mq">🎹 Simon</span><span class="mq">🧩 Slide Puzzle</span><span class="mq">🎡 Wheel of Dates</span><span class="mq">🥠 Fortune Cookie</span><span class="mq">⚡ Quick Tap</span>
+              </div>
+            </div>
+            <a href="games.html" class="btn rose">Play now →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 09 · FINALE -->
+    <section class="stage finale tall-m" id="end" data-stage data-obj="center" data-chapter="Forever" data-emoji="💖" data-orbit="0.2">
+      <div class="wrap">
+        <div class="col c">
+          <span class="eyebrow">to be continued</span>
+          <h2 class="h2">To many more <span class="grad">chapters</span>.</h2>
+          <div class="hero-cta" style="justify-content:center">
+            <a href="flower.html" class="btn rose">Watch it bloom 🌸</a>
+            <a href="#hero" class="btn ghost">Fly back to the start ↑</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Made with ❤️ by <b>hubby</b></p>
+  </footer>
+
+  <!-- Welcome popup -->
+  <div id="welcomePopup" class="popup hidden">
+    <div class="pop-box">
+      <button class="pop-x" id="pop-x" aria-label="Close">×</button>
+      <div class="em">✨</div>
+      <h2>Hello Cutieee !</h2>
+      <a href="https://www.youtube.com/@Bubuanddudu01" class="btn rose sm">YT Channel</a>
+      <p>Meka sudu ara Bubu and Duduge cartoons thiyena yt channel ekak.</p>
+      <button class="btn" id="pop-ok">Hehe</button>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="world.js"></script>
+  <script src="ui.js"></script>
+  <script src="journey.js"></script>
+  <script>
+  (function () {
+    'use strict';
+    var $ = function (id) { return document.getElementById(id); };
+
+    /* ================= PASSWORD GATE ================= */
+    var correctPassword = "mychaya";
+    function maybeWelcome() {
+      var seen = false;
+      try { seen = sessionStorage.getItem('oc_welcomed') === '1'; } catch (e) {}
+      if (!seen) setTimeout(function () { $('welcomePopup').classList.remove('hidden'); }, 700);
+    }
+    function closePopup() {
+      $('welcomePopup').classList.add('hidden');
+      try { sessionStorage.setItem('oc_welcomed', '1'); } catch (e) {}
+    }
+    function checkPassword() {
+      var input = $('password');
+      if (input.value.trim() === correctPassword) {
+        document.documentElement.classList.remove('locked');
+        try { sessionStorage.setItem('oc_unlocked', '1'); } catch (e) {}
+        window.dispatchEvent(new Event('resize'));
+        maybeWelcome();
+      } else {
+        $('error').textContent = 'Incorrect password.';
+        var box = $('gate-card');
+        box.classList.remove('shake'); void box.offsetWidth; box.classList.add('shake');
+      }
+    }
+    $('gate-btn').addEventListener('click', checkPassword);
+    $('password').addEventListener('keydown', function (e) { if (e.key === 'Enter') checkPassword(); });
+    $('pop-x').addEventListener('click', closePopup);
+    $('pop-ok').addEventListener('click', closePopup);
+    if (!document.documentElement.classList.contains('locked')) maybeWelcome();
+
+    /* ================= COUNT-UP TIMER ================= */
+    /* change this one line to change the start date of the counter */
+    var START_DATE = new Date("2026-04-12T00:00:00");
+    function setVal(id, val) {
+      var el = $(id), s = String(val);
+      if (el.textContent !== s) { el.textContent = s; el.classList.remove('tick'); void el.offsetWidth; el.classList.add('tick'); }
+    }
+    function updateCounter() {
+      var diff = new Date() - START_DATE;
+      if (diff < 0) { ['days', 'hours', 'minutes', 'seconds'].forEach(function (id) { setVal(id, 0); }); return; }
+      setVal('days', Math.floor(diff / 86400000));
+      setVal('hours', Math.floor((diff / 3600000) % 24));
+      setVal('minutes', Math.floor((diff / 60000) % 60));
+      setVal('seconds', Math.floor((diff / 1000) % 60));
+    }
+    setInterval(updateCounter, 1000); updateCounter();
+
+    /* ================= BREATHING ================= */
+    var breathingInterval = null, isBreathing = false;
+    var heartNotes = [
+      "\"I am right here with you. Take things one breath at a time.\"",
+      "\"Relax your jaw, drop your shoulders, you are completely safe.\"",
+      "\"No matter how busy the world gets, I will always be your safe spot.\"",
+      "\"You are so strong, and I am so proud of you.\""
+    ];
+    function toggleBreathing() {
+      var box = $('breath-box'), status = $('breath-status'), note = $('breath-note');
+      if (isBreathing) {
+        clearInterval(breathingInterval); isBreathing = false;
+        box.classList.remove('inhale', 'exhale');
+        status.textContent = "Tap the heart to begin";
+        return;
+      }
+      isBreathing = true;
+      var step = 0;
+      note.textContent = heartNotes[Math.floor(Math.random() * heartNotes.length)];
+      function runCycle() {
+        if (step % 2 === 0) { status.textContent = "Inhale slowly... 🌬️"; box.classList.remove('exhale'); box.classList.add('inhale'); }
+        else { status.textContent = "Exhale slowly... ✨"; box.classList.remove('inhale'); box.classList.add('exhale'); }
+        step++;
+      }
+      runCycle();
+      breathingInterval = setInterval(runCycle, 4000);
+    }
+    $('breath-btn').addEventListener('click', toggleBreathing);
+
+    /* ================= FAIRY TALE LOADER ================= */
+    var fallbackStories = { 'story1.txt': " ", 'story2.txt': " ", 'story3.txt': " " };
+    function loadTale(filename, btn) {
+      [].forEach.call(document.querySelectorAll('.tale-btn'), function (b) { b.classList.remove('active'); });
+      if (btn) btn.classList.add('active');
+      var box = $('tale-content');
+      box.innerHTML = '<div class="tale-loading">Opening storybook... ✨</div>';
+      fetch(filename)
+        .then(function (r) { if (!r.ok) throw new Error('net'); return r.text(); })
+        .then(function (t) { box.textContent = t; })
+        .catch(function () { box.textContent = fallbackStories[filename] || "Story file not found!"; });
+    }
+    [].forEach.call(document.querySelectorAll('.tale-btn'), function (b) {
+      b.addEventListener('click', function () { loadTale(b.getAttribute('data-file'), b); });
+    });
+    loadTale('story1.txt', document.querySelector('.tale-btn'));
+  })();
+  </script>
+</body>
+</html>
