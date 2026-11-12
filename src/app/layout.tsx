@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import { ClerkProvider, SignedIn } from "@clerk/nextjs";
+import { ClerkProvider, Show } from "@clerk/nextjs";
+import { Suspense } from "react";
 import Nav from "@/components/Nav";
 import "./globals.css";
 
@@ -15,15 +16,17 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className="bg-white text-neutral-800 antialiased">
-          <SignedIn>
-            <Nav />
-          </SignedIn>
+    <html lang="en">
+      <body className="bg-white text-neutral-800 antialiased">
+        <ClerkProvider>
+          <Suspense fallback={null}>
+            <Show when="signed-in">
+              <Nav />
+            </Show>
+          </Suspense>
           {children}
-        </body>
-      </html>
-    </ClerkProvider>
+        </ClerkProvider>
+      </body>
+    </html>
   );
 }
