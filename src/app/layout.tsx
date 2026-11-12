@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { ClerkProvider, SignedIn } from "@clerk/nextjs";
+import { ClerkProvider, Show } from "@clerk/nextjs";
 import Nav from "@/components/Nav";
 import "./globals.css";
 
@@ -15,15 +15,15 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className="bg-white text-neutral-800 antialiased">
-          <SignedIn>
+    <html lang="en">
+      <body className="bg-white text-neutral-800 antialiased">
+        <ClerkProvider afterSignOutUrl="/sign-in">
+          <Show when="signed-in">
             <Nav />
-          </SignedIn>
+          </Show>
           {children}
-        </body>
-      </html>
-    </ClerkProvider>
+        </ClerkProvider>
+      </body>
+    </html>
   );
 }
