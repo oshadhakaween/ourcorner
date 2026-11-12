@@ -7,9 +7,8 @@ export default clerkMiddleware(async (auth, req) => {
   if (!isPublic(req)) await auth.protect();
 });
 
+// Now also covers .html, .js, .css and photos, because your original
+// site is served from a private folder and must stay behind the login.
 export const config = {
-  matcher: [
-    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|webmanifest)).*)",
-    "/(api|trpc)(.*)",
-  ],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)", "/(api|trpc)(.*)"],
 };

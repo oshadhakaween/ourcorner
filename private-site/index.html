@@ -9,36 +9,20 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <script>
-    /* lock the page until the password is entered (remembered for this browser session) */
-    try { if (sessionStorage.getItem('oc_unlocked') !== '1') document.documentElement.classList.add('locked'); }
-    catch (e) { document.documentElement.classList.add('locked'); }
-  </script>
 </head>
 <body>
   <div class="wash" aria-hidden="true"></div>
   <canvas id="world" aria-hidden="true"></canvas>
   <div class="topbar-line" aria-hidden="true"></div>
 
-  <!-- Password gate -->
-  <div id="gate">
-    <div class="gate-card glass" id="gate-card">
-      <div class="gate-heart" aria-hidden="true">🤍</div>
-      <h1>Our private corner</h1>
-      <p>Only for one person. Enter the password.</p>
-      <div class="gate-row">
-        <input type="password" id="password" placeholder="password" autocomplete="off" aria-label="Password">
-        <button class="btn rose" id="gate-btn">Enter</button>
-      </div>
-      <div id="error" role="alert"></div>
-    </div>
-  </div>
-
   <!-- Top bar -->
   <header class="top">
     <div class="top-in">
       <a href="#hero" class="pill-ui brand"><span class="dot">♥</span><b>Oshadha &amp; Chaya</b></a>
       <div class="top-r">
+        <a href="/chat" class="pill-ui hide-m">Chat 💬</a>
+        <a href="/games" class="pill-ui hide-m">Together 🎲</a>
+        <a href="/gallery" class="pill-ui hide-m">Photos 📷</a>
         <a href="flower.html" class="pill-ui hide-m">Bloom 🌷</a>
         <a href="games.html" class="pill-ui hot hide-m">Arcade 🎮</a>
         <button class="pill-ui" id="menu-btn" aria-label="Menu" aria-expanded="false"><span class="menu-ico"><i></i><i></i></span>Menu</button>
@@ -56,8 +40,11 @@
     <a href="#letters" style="--i:5"><small>06</small>Letters</a>
     <a href="#tales" style="--i:6"><small>07</small>Fairy tales</a>
     <a href="#arcade" style="--i:7"><small>08</small>Arcade</a>
-    <a href="games.html" style="--i:8"><small>🎮</small>Play now →</a>
-    <a href="flower.html" style="--i:9"><small>🌷</small>Watch it bloom →</a>
+    <a href="/chat" style="--i:8"><small>💬</small>Chat →</a>
+    <a href="/games" style="--i:9"><small>🎲</small>Play together →</a>
+    <a href="/gallery" style="--i:10"><small>📷</small>Our photos →</a>
+    <a href="games.html" style="--i:11"><small>🎮</small>Solo arcade →</a>
+    <a href="flower.html" style="--i:12"><small>🌷</small>Watch it bloom →</a>
   </nav>
 
   <!-- chapter rail / mini pill -->
@@ -285,6 +272,7 @@
               </div>
             </div>
             <a href="games.html" class="btn rose">Play now →</a>
+            <a href="/games" class="btn ghost">Play together 🎲</a>
           </div>
         </div>
       </div>
@@ -330,8 +318,8 @@
     'use strict';
     var $ = function (id) { return document.getElementById(id); };
 
-    /* ================= PASSWORD GATE ================= */
-    var correctPassword = "mychaya";
+    /* ================= WELCOME POPUP ================= */
+    /* Logins are now handled by Clerk, so this page opens straight away. */
     function maybeWelcome() {
       var seen = false;
       try { seen = sessionStorage.getItem('oc_welcomed') === '1'; } catch (e) {}
@@ -341,24 +329,9 @@
       $('welcomePopup').classList.add('hidden');
       try { sessionStorage.setItem('oc_welcomed', '1'); } catch (e) {}
     }
-    function checkPassword() {
-      var input = $('password');
-      if (input.value.trim() === correctPassword) {
-        document.documentElement.classList.remove('locked');
-        try { sessionStorage.setItem('oc_unlocked', '1'); } catch (e) {}
-        window.dispatchEvent(new Event('resize'));
-        maybeWelcome();
-      } else {
-        $('error').textContent = 'Incorrect password.';
-        var box = $('gate-card');
-        box.classList.remove('shake'); void box.offsetWidth; box.classList.add('shake');
-      }
-    }
-    $('gate-btn').addEventListener('click', checkPassword);
-    $('password').addEventListener('keydown', function (e) { if (e.key === 'Enter') checkPassword(); });
     $('pop-x').addEventListener('click', closePopup);
     $('pop-ok').addEventListener('click', closePopup);
-    if (!document.documentElement.classList.contains('locked')) maybeWelcome();
+    maybeWelcome();
 
     /* ================= COUNT-UP TIMER ================= */
     /* change this one line to change the start date of the counter */
