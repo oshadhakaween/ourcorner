@@ -4,30 +4,34 @@ import { z } from "zod";
 import { r2 } from "@/lib/r2";
 import { getMe } from "@/lib/auth";
 
+const MAX_PHOTO_BYTES = 10 * 1024 * 1024;
+const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/avif"] as const;
 const Body = z.object({
   filename: z.string().min(1).max(120),
-  contentType: z.string().regex(/^image\//),
+  contentType: z.enum(IMAGE_TYPES),
+  size: z.number().int().positive().max(MAX_PHOTO_BYTES),
 });
 
-// Hands out a 5 minute link the browser uses to upload one photo straight to R2.
 export async function POST(req: Request) {
   const me = await getMe();
   if (!me) return new Response("Unauthorized", { status: 401 });
 
-  const parsed = Body.safeParse(await req.json());
+  let body: unknown;
+  try { body = await req.json(); } catch { return new Response("Bad request", { status: 400 }); }
+  const parsed = Body.safeParse(body);
   if (!parsed.success) return new Response("Bad request", { status: 400 });
 
   const safe = parsed.data.filename.replace(/[^a-zA-Z0-9._-]/g, "_");
-  const key = `photos/${Date.now()}-${safe}`;
+  const key = `photos/${me.id}/${crypto.randomUUID()}-${safe}`;
+  const url = await getSignedUrl(r2, new PutObjectCommand({
+    Bucket: process.env.R2_BUCKET!,
+    Key: key,
+    ContentType: parsed.data.contentType,
+    Metadata: { uploader: me.id },
+  }), { expiresIn: 300 });
 
-  const url = await getSignedUrl(
-    r2,
-    new PutObjectCommand({
-      Bucket: process.env.R2_BUCKET!,
-      Key: key,
-      ContentType: parsed.data.contentType,
-    }),
-    { expiresIn: 300 }
-  );
-  return Response.json({ url, key });
+  return Response.json({
+    url, key,
+    headers: { "Content-Type": parsed.data.contentType, "x-amz-meta-uploader": me.id },
+  });
 }
