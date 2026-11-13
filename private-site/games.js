@@ -779,6 +779,8 @@
     { id: 'quick', title: 'Quick Tap', emoji: '⚡', tag: 'Reflex', cat: 'quick', blurb: 'How fast are your fingers? Tap on green.', col: 'mint', fn: quick, best: function () { return c0('qt') ? 'Best: ' + c0('qt') + ' ms' : ''; } }
   ];
   function c0(k) { return store.get('best_' + k, 0); }
+  /* two-player games (together.js) join the list */
+  if (window.OCMulti) window.OCMulti.install(GAMES);
 
   var lobbyView = $('#lobby-view'), stageView = $('#stage-view'), stage = $('#stage'), exits = [];
   var lobby = $('#lobby');
@@ -807,7 +809,7 @@
     });
   }
 
-  function open(id) {
+  function open(id, arg) {
     var g = GAMES.filter(function (x) { return x.id === id; })[0];
     if (!g) return close();
     exits.forEach(function (f) { try { f(); } catch (e) {} }); exits = [];
@@ -819,7 +821,8 @@
       pills: function (arr) { $('#stage-score').innerHTML = arr.map(function (p) { return '<span class="pill">' + p[0] + ' <b>' + p[1] + '</b></span>'; }).join(''); },
       best: function (k) { return store.get('best_' + k, 0); },
       setBest: function (k, v) { store.set('best_' + k, v); },
-      onExit: function (f) { exits.push(f); }
+      onExit: function (f) { exits.push(f); },
+      arg: arg || ''
     };
     window.scrollTo(0, 0);
     g.fn(ctx);
@@ -828,12 +831,16 @@
     exits.forEach(function (f) { try { f(); } catch (e) {} }); exits = [];
     stage.innerHTML = ''; stageView.hidden = true; lobbyView.hidden = false; renderLobby();
   }
-  function route() { var id = location.hash.slice(1); if (id) open(id); else close(); }
+  function route() {
+    var parts = location.hash.slice(1).split('/'), id = parts[0];
+    if (id === 'mp') { filter = 'duo'; history.replaceState('', doc.title, location.pathname + location.search); close(); return; }
+    if (id) open(id, parts[1]); else close();
+  }
 
   var fb = $('#filters'); if (fb) fb.addEventListener('click', function (e) { var f = e.target.dataset.f; if (f) { filter = f; renderLobby(); } });
   lobby.addEventListener('click', function (e) { var el = e.target.closest('.gcard'); if (el) location.hash = el.dataset.id; });
   $('#back').addEventListener('click', function () { history.pushState('', doc.title, location.pathname + location.search); route(); });
-  $('#surprise').addEventListener('click', function () { location.hash = pick(GAMES).id; });
+  $('#surprise').addEventListener('click', function () { location.hash = pick(GAMES.filter(function (g) { return g.cat !== 'duo'; })).id; });
   window.addEventListener('hashchange', route);
   route();
 })();

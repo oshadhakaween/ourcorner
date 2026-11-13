@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="app.css">
 </head>
 <body>
   <div class="wash" aria-hidden="true"></div>
@@ -20,12 +21,12 @@
     <div class="top-in">
       <a href="#hero" class="pill-ui brand"><span class="dot">♥</span><b>Oshadha &amp; Chaya</b></a>
       <div class="top-r">
-        <a href="/chat" class="pill-ui hide-m">Chat 💬</a>
-        <a href="/games" class="pill-ui hide-m">Together 🎲</a>
-        <a href="/gallery" class="pill-ui hide-m">Photos 📷</a>
+        <a href="#vault" class="pill-ui hide-m">Photos 📷</a>
+        <a href="#chat" class="pill-ui hide-m">Chat 💬</a>
         <a href="flower.html" class="pill-ui hide-m">Bloom 🌷</a>
         <a href="games.html" class="pill-ui hot hide-m">Arcade 🎮</a>
         <button class="pill-ui" id="menu-btn" aria-label="Menu" aria-expanded="false"><span class="menu-ico"><i></i><i></i></span>Menu</button>
+        <div class="oc-who" id="who"></div>
       </div>
     </div>
   </header>
@@ -39,12 +40,10 @@
     <a href="#calm" style="--i:4"><small>05</small>Breathe</a>
     <a href="#letters" style="--i:5"><small>06</small>Letters</a>
     <a href="#tales" style="--i:6"><small>07</small>Fairy tales</a>
-    <a href="#arcade" style="--i:7"><small>08</small>Arcade</a>
-    <a href="/chat" style="--i:8"><small>💬</small>Chat →</a>
-    <a href="/games" style="--i:9"><small>🎲</small>Play together →</a>
-    <a href="/gallery" style="--i:10"><small>📷</small>Our photos →</a>
-    <a href="games.html" style="--i:11"><small>🎮</small>Solo arcade →</a>
-    <a href="flower.html" style="--i:12"><small>🌷</small>Watch it bloom →</a>
+    <a href="#chat" style="--i:7"><small>08</small>Chat</a>
+    <a href="#arcade" style="--i:8"><small>09</small>Arcade</a>
+    <a href="games.html" style="--i:9"><small>🎮</small>Open the arcade →</a>
+    <a href="flower.html" style="--i:10"><small>🌷</small>Watch it bloom →</a>
   </nav>
 
   <!-- chapter rail / mini pill -->
@@ -166,15 +165,12 @@
         <div class="vault-title">
           <span class="eyebrow">frozen little moments</span>
           <h2 class="h2">Photo <span class="grad">vault</span></h2>
-          <p class="lead small">Keep scrolling — fly through our favourite frames.</p>
+          <p class="lead small">Keep scrolling — fly through our favourite frames. Tap “Edit vault” to add, rename or remove photos.</p>
         </div>
-        <div class="tunnel">
-          <figure class="tframe"><div class="ph">📷<img src="img1.jpg" alt="First meet" loading="lazy" onerror="this.remove()"></div><figcaption class="cap">First Meet</figcaption></figure>
-          <figure class="tframe"><div class="ph">⛰️<img src="img2.jpg" alt="Mountain hike" loading="lazy" onerror="this.remove()"></div><figcaption class="cap">Mountain Hike ⛰️</figcaption></figure>
-          <figure class="tframe"><div class="ph">🧸<img src="img3.jpg" alt="Teddy" loading="lazy" onerror="this.remove()"></div><figcaption class="cap">🧸</figcaption></figure>
-          <figure class="tframe"><div class="ph">😊<img src="img4.jpg" alt="Favorite smile" loading="lazy" onerror="this.remove()"></div><figcaption class="cap">Favorite Smile</figcaption></figure>
-          <figure class="tframe"><div class="ph">🤍<img src="img5.jpg" alt="Beautiful soles in a frame" loading="lazy" onerror="this.remove()"></div><figcaption class="cap">Beautiful soles in a frame</figcaption></figure>
+        <div class="tunnel" id="tunnel">
+          <figure class="tframe"><div class="ph">📷</div><figcaption class="cap">Loading our photos…</figcaption></figure>
         </div>
+        <button class="pill-ui vault-edit" id="vault-edit" type="button" aria-label="Edit the photo vault">✏️ Edit vault</button>
         <div class="vault-count" id="vault-count"><b>1</b> / 5</div>
       </div>
     </section>
@@ -255,30 +251,54 @@
       </div>
     </section>
 
-    <!-- 08 · ARCADE -->
-    <section class="stage tall-m" id="arcade" data-stage data-obj="left" data-chapter="Arcade" data-emoji="🎲" data-orbit="0.5">
+    <!-- 08 · CHAT -->
+    <section class="stage tall-m" id="chat" data-stage data-obj="center" data-chapter="Chat" data-emoji="💬" data-orbit="0.3">
       <div class="wrap">
-        <div class="col r">
-          <div class="glass pad games-card reveal" data-tilt="3">
-            <span class="eyebrow">need to unwind?</span>
-            <h2 class="h2" style="font-size:clamp(2.2rem,5.5vw,3.6rem)">Sixteen tiny games, <span class="grad">one arcade</span></h2>
-            <p class="muted">Snake, 2048 with flowers, a flappy heart, a love quiz, scratch coupons and more — all made for one person.</p>
-            <div class="mq-wrap" aria-hidden="true">
-              <div class="marquee">
-                <span class="mq">⭕ Tic-Tac-Toe</span><span class="mq">🃏 Memory</span><span class="mq">🫧 Bubble Pop</span><span class="mq">🔴 Pop-It</span><span class="mq">🧺 Heart Catcher</span><span class="mq">🌷 2048 Garden</span><span class="mq">💌 Love Quiz</span><span class="mq">🎟️ Scratch</span>
-                <span class="mq">🐍 Snake</span><span class="mq">🧸 Whack-a-Teddy</span><span class="mq">💗 Heart Hop</span><span class="mq">🎹 Simon</span><span class="mq">🧩 Slide Puzzle</span><span class="mq">🎡 Wheel of Dates</span><span class="mq">🥠 Fortune Cookie</span><span class="mq">⚡ Quick Tap</span>
-                <span class="mq">⭕ Tic-Tac-Toe</span><span class="mq">🃏 Memory</span><span class="mq">🫧 Bubble Pop</span><span class="mq">🔴 Pop-It</span><span class="mq">🧺 Heart Catcher</span><span class="mq">🌷 2048 Garden</span><span class="mq">💌 Love Quiz</span><span class="mq">🎟️ Scratch</span>
-                <span class="mq">🐍 Snake</span><span class="mq">🧸 Whack-a-Teddy</span><span class="mq">💗 Heart Hop</span><span class="mq">🎹 Simon</span><span class="mq">🧩 Slide Puzzle</span><span class="mq">🎡 Wheel of Dates</span><span class="mq">🥠 Fortune Cookie</span><span class="mq">⚡ Quick Tap</span>
-              </div>
+        <div class="col c wide">
+          <div class="sec-head reveal">
+            <span class="eyebrow">just the two of us</span>
+            <h2 class="h2">Say <span class="grad">hi</span></h2>
+          </div>
+          <div class="glass chat-card reveal" id="chat-card">
+            <div class="chat-top">
+              <div class="chat-with" id="chat-with"><b>Loading…</b></div>
+              <span class="oc-live" id="chat-live"><i></i><span>Connecting</span></span>
             </div>
-            <a href="games.html" class="btn rose">Play now →</a>
-            <a href="/games" class="btn ghost">Play together 🎲</a>
+            <div class="oc-log" id="chat-log" aria-live="polite"></div>
+            <form class="oc-form" id="chat-form" autocomplete="off">
+              <input id="chat-input" type="text" maxlength="2000" placeholder="Write something sweet…" aria-label="Message">
+              <button type="button" class="btn ghost icon" id="chat-heart" aria-label="Send a heart">💗</button>
+              <button class="btn rose" type="submit">Send</button>
+            </form>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 09 · FINALE -->
+    <!-- 09 · ARCADE -->
+    <section class="stage tall-m" id="arcade" data-stage data-obj="left" data-chapter="Arcade" data-emoji="🎲" data-orbit="0.5">
+      <div class="wrap">
+        <div class="col r">
+          <div class="glass pad games-card reveal" data-tilt="3">
+            <span class="eyebrow">need to unwind? or play together?</span>
+            <h2 class="h2" style="font-size:clamp(2.2rem,5.5vw,3.6rem)">Nineteen tiny games, <span class="grad">one arcade</span></h2>
+            <p class="muted">Snake, 2048 with flowers, a flappy heart, a love quiz, scratch coupons and more — plus three you can play <b>together</b>, live, on two phones.</p>
+            <div class="mq-wrap" aria-hidden="true">
+              <div class="marquee">
+                <span class="mq">👫 Play together</span><span class="mq">⭕ Tic-Tac-Toe</span><span class="mq">🃏 Memory</span><span class="mq">🫧 Bubble Pop</span><span class="mq">🔴 Pop-It</span><span class="mq">🧺 Heart Catcher</span><span class="mq">🌷 2048 Garden</span><span class="mq">💌 Love Quiz</span><span class="mq">🎟️ Scratch</span>
+                <span class="mq">🐍 Snake</span><span class="mq">🧸 Whack-a-Teddy</span><span class="mq">💗 Heart Hop</span><span class="mq">🎹 Simon</span><span class="mq">🧩 Slide Puzzle</span><span class="mq">🎡 Wheel of Dates</span><span class="mq">🥠 Fortune Cookie</span><span class="mq">⚡ Quick Tap</span>
+                <span class="mq">👫 Play together</span><span class="mq">⭕ Tic-Tac-Toe</span><span class="mq">🃏 Memory</span><span class="mq">🫧 Bubble Pop</span><span class="mq">🔴 Pop-It</span><span class="mq">🧺 Heart Catcher</span><span class="mq">🌷 2048 Garden</span><span class="mq">💌 Love Quiz</span><span class="mq">🎟️ Scratch</span>
+                <span class="mq">🐍 Snake</span><span class="mq">🧸 Whack-a-Teddy</span><span class="mq">💗 Heart Hop</span><span class="mq">🎹 Simon</span><span class="mq">🧩 Slide Puzzle</span><span class="mq">🎡 Wheel of Dates</span><span class="mq">🥠 Fortune Cookie</span><span class="mq">⚡ Quick Tap</span>
+              </div>
+            </div>
+            <a href="games.html" class="btn rose">Play now →</a>
+            <a href="games.html#mp" class="btn ghost">Play together 🎲</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10 · FINALE -->
     <section class="stage finale tall-m" id="end" data-stage data-obj="center" data-chapter="Forever" data-emoji="💖" data-orbit="0.2">
       <div class="wrap">
         <div class="col c">
@@ -313,6 +333,10 @@
   <script src="world.js"></script>
   <script src="ui.js"></script>
   <script src="journey.js"></script>
+  <script src="https://cdn.ably.com/lib/ably.min-2.js" defer></script>
+  <script src="app.js" defer></script>
+  <script src="vault.js" defer></script>
+  <script src="chat.js" defer></script>
   <script>
   (function () {
     'use strict';

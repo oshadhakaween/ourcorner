@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="games.css">
+  <link rel="stylesheet" href="app.css">
 </head>
 <body class="games-page">
   <div class="wash" aria-hidden="true"></div>
@@ -20,19 +21,17 @@
       <nav class="nav" aria-label="Pages">
         <a href="index.html">Home</a>
         <a href="flower.html">Bloom</a>
-        <a href="/chat">Chat 💬</a>
-        <a href="/games">Together 🎲</a>
+        <a href="index.html#chat">Chat 💬</a>
         <a href="games.html" class="cta active">Arcade 🎮</a>
       </nav>
-      <span class="top-end"></span>
+      <div class="oc-who" id="who"></div>
     </div>
   </header>
 
   <nav class="dock" aria-label="Quick navigation">
     <a href="index.html"><span>🏡</span>Home</a>
     <a href="flower.html"><span>🌷</span>Bloom</a>
-    <a href="/chat"><span>💬</span>Chat</a>
-    <a href="/games"><span>🎲</span>Together</a>
+    <a href="index.html#chat"><span>💬</span>Chat</a>
     <a href="games.html" class="active"><span>🎮</span>Arcade</a>
   </nav>
 
@@ -42,9 +41,9 @@
       <div class="wrap">
         <span class="eyebrow">feeling stressed? come play</span>
         <h1 class="h1">The <em>Arcade</em></h1>
-        <p class="lead">Sixteen tiny games made for one person. Pick one, breathe out, and let your shoulders drop.</p>
+        <p class="lead">Sixteen tiny games for one person, and three to play <b>together</b>, live. Pick one, breathe out, and let your shoulders drop.</p>
         <div class="filters" id="filters" aria-label="Filter games">
-          <button data-f="all" class="on">All</button><button data-f="chill">🌿 Chill</button><button data-f="quick">⚡ Quick</button><button data-f="brain">🧠 Brainy</button><button data-f="us">💞 Just us</button>
+          <button data-f="all" class="on">All</button><button data-f="chill">🌿 Chill</button><button data-f="quick">⚡ Quick</button><button data-f="brain">🧠 Brainy</button><button data-f="duo">👫 Two players</button><button data-f="us">💞 Just us</button>
           <span class="count" id="count"></span>
         </div>
         <div class="arc-tools">
@@ -53,6 +52,7 @@
         </div>
       </div>
     </section>
+    <div class="mp-invites" id="invites"></div>
     <section style="padding-top:1.5rem">
       <div class="wrap"><div class="lobby" id="lobby"></div></div>
     </section>
@@ -73,6 +73,9 @@
   </div>
 
   <script src="ui.js"></script>
+  <script src="https://cdn.ably.com/lib/ably.min-2.js"></script>
+  <script src="app.js"></script>
+  <script src="together.js"></script>
   <script src="games.js"></script>
 </body>
 </html>

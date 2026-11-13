@@ -64,6 +64,16 @@
     if (vcount) vcount.innerHTML = '<b>' + (near + 1) + '</b> / ' + n;
   }
 
+  /* the vault tells us when photos were added / removed (see vault.js) */
+  window.OCtunnel = {
+    refresh: function () {
+      if (!vault) return;
+      frames = $$('.tframe', vault);
+      vault.style.setProperty('--n', Math.max(1, frames.length));
+      schedule();
+    }
+  };
+
   /* ---------- the loop (only runs when scroll/resize happened) ---------- */
   var ticking = false;
   function schedule() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }

@@ -204,7 +204,7 @@ section.stage.hero{padding-top:clamp(6rem,12vw,8rem);padding-bottom:clamp(3rem,6
 .sc3 p+p{margin-top:.4rem}
 
 /* vault: 3D photo tunnel */
-.vault{position:relative;height:520vh}
+.vault{position:relative;--n:5;height:calc(var(--n) * 92vh + 60vh)}
 .vault-stick{position:sticky;top:0;height:100svh;overflow:hidden;display:flex;align-items:center}
 .vault-title{position:absolute;left:max(1.4rem,calc((100vw - var(--maxw))/2));top:clamp(5.5rem,11vh,7.5rem);z-index:5;display:flex;flex-direction:column;gap:.7rem;max-width:min(380px,42vw)}
 .tunnel{position:absolute;right:0;top:0;width:62%;height:100%;perspective:1100px;perspective-origin:50% 50%}
@@ -215,7 +215,7 @@ section.stage.hero{padding-top:clamp(6rem,12vw,8rem);padding-bottom:clamp(3rem,6
 .vault-count{position:absolute;right:max(1.4rem,calc((100vw - var(--maxw))/2));bottom:clamp(1.5rem,5vh,3rem);z-index:5;font-family:var(--display);font-weight:800;font-size:1.1rem;letter-spacing:-.02em}
 .vault-count b{color:var(--rose)}
 @media (max-width:900px){
-  .vault{height:460vh}
+  .vault{height:calc(var(--n) * 80vh + 60vh)}
   .vault-title{left:1.2rem;right:1.2rem;max-width:none;top:5.4rem;align-items:center;text-align:center}
   .vault-title .lead{display:none}
   .tunnel{width:100%;top:6%}

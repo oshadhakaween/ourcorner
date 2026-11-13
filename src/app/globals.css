@@ -1,26 +1,152 @@
-@import "tailwindcss";
-
+/* =========================================================
+   Login, logout and notice pages: same "Pearl Aurora" look as the site
+   ========================================================= */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --ink: #120f1c;
+  --ink2: #3b3548;
+  --muted: #7b758a;
+  --line: rgba(18, 15, 28, 0.09);
+  --rose: #ff3d7f;
+  --rose-d: #e01f66;
+  --rose-s: #ffe8f0;
+  --aurora: linear-gradient(110deg, #ff3d7f 0%, #ff8a5c 35%, #9b6bff 72%, #38b6ff 100%);
+  --display: "Bricolage Grotesque", "Plus Jakarta Sans", system-ui, sans-serif;
+  --serif: "Instrument Serif", Georgia, serif;
+  --sans: "DM Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--sans);
+  color: var(--ink);
+  background: #fff;
+  line-height: 1.6;
+  min-height: 100svh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}
+
+.wash {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(700px 520px at 6% 0%, rgba(255, 61, 127, 0.12), transparent 70%),
+    radial-gradient(640px 520px at 98% 22%, rgba(123, 92, 255, 0.12), transparent 70%),
+    radial-gradient(620px 460px at 30% 100%, rgba(56, 182, 255, 0.1), transparent 70%),
+    radial-gradient(520px 420px at 100% 100%, rgba(255, 138, 92, 0.1), transparent 70%);
+}
+
+.auth-page {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.auth-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 1.1rem 0.4rem 0.4rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 24px 60px -30px rgba(80, 40, 120, 0.3);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  font-family: var(--display);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.auth-brand .dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--aurora);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-size: 0.85rem;
+}
+
+.auth-title {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(2.3rem, 9vw, 3.6rem);
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+}
+
+.auth-title em {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  background: var(--aurora);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.auth-sub {
+  color: var(--muted);
+  max-width: 30ch;
+}
+
+.auth-card {
+  width: min(430px, 100%);
+  padding: 1.2rem 1rem;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset, 0 40px 80px -30px rgba(255, 61, 127, 0.38);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  display: flex;
+  justify-content: center;
+}
+
+.auth-note {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.auth-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.92rem 1.55rem;
+  border-radius: 999px;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  color: #fff;
+  background: var(--aurora);
+  box-shadow: 0 14px 30px -12px rgba(255, 61, 127, 0.75);
+}
+
+.auth-big {
+  font-size: 3rem;
 }

@@ -1,51 +1,52 @@
-import { GetObjectCommand, HeadObjectCommand } from "@aws-sdk/client-s3";
+import { GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { desc } from "drizzle-orm";
-import { z } from "zod";
+import { asc } from "drizzle-orm";
 import { db } from "@/db";
 import { photos } from "@/db/schema";
 import { r2 } from "@/lib/r2";
 import { getMe } from "@/lib/auth";
 
-const MAX_PHOTO_BYTES = 10 * 1024 * 1024;
-const IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/gif", "image/avif"]);
-
+// List the vault photos (oldest first = the order you fly through them), each with a 1 hour viewing link.
 export async function GET() {
   const me = await getMe();
   if (!me) return new Response("Unauthorized", { status: 401 });
 
-  const rows = await db.select().from(photos).orderBy(desc(photos.createdAt)).limit(100);
-  const withUrls = await Promise.all(rows.map(async (photo) => ({
-    ...photo,
-    url: await getSignedUrl(r2, new GetObjectCommand({ Bucket: process.env.R2_BUCKET!, Key: photo.key }), { expiresIn: 3600 }),
-  })));
+  const rows = await db.select().from(photos).orderBy(asc(photos.id)).limit(60);
+  const withUrls = await Promise.all(
+    rows.map(async (p) => ({
+      ...p,
+      url: await getSignedUrl(
+        r2,
+        new GetObjectCommand({ Bucket: process.env.R2_BUCKET!, Key: p.key }),
+        { expiresIn: 3600 }
+      ),
+    }))
+  );
   return Response.json(withUrls);
 }
 
-const Body = z.object({ key: z.string().min(1).max(512), caption: z.string().max(200).nullable().optional() });
-
+// Remember a photo after the browser finished uploading it.
 export async function POST(req: Request) {
   const me = await getMe();
   if (!me) return new Response("Unauthorized", { status: 401 });
 
-  let body: unknown;
-  try { body = await req.json(); } catch { return new Response("Bad request", { status: 400 }); }
-  const parsed = Body.safeParse(body);
-  if (!parsed.success) return new Response("Bad request", { status: 400 });
-
-  const { key, caption } = parsed.data;
-  if (!key.startsWith(`photos/${me.id}/`)) return new Response("Bad photo key", { status: 400 });
-
+  let json: { key?: unknown; caption?: unknown };
   try {
-    const object = await r2.send(new HeadObjectCommand({ Bucket: process.env.R2_BUCKET!, Key: key }));
-    if (object.Metadata?.uploader !== me.id || typeof object.ContentLength !== "number" ||
-        object.ContentLength > MAX_PHOTO_BYTES || !object.ContentType || !IMAGE_TYPES.has(object.ContentType)) {
-      return new Response("Invalid photo upload", { status: 400 });
-    }
+    json = await req.json();
   } catch {
-    return new Response("Uploaded photo not found", { status: 400 });
+    return new Response("Bad request", { status: 400 });
   }
-
-  await db.insert(photos).values({ key, caption: caption ?? null, uploaderId: me.id });
-  return Response.json({ ok: true });
+  const { key, caption } = json;
+  if (typeof key !== "string" || !key.startsWith("photos/") || key.length > 300) {
+    return new Response("Bad request", { status: 400 });
+  }
+  const [row] = await db
+    .insert(photos)
+    .values({
+      key,
+      caption: typeof caption === "string" && caption.trim() ? caption.trim().slice(0, 120) : null,
+      uploaderId: me.id,
+    })
+    .returning();
+  return Response.json(row);
 }

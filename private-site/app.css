@@ -1,0 +1,189 @@
+/* =========================================================
+   Signed-in pages: profile chip, chat, play together, photos
+   (loads after style.css, uses the same Pearl Aurora tokens)
+   ========================================================= */
+
+/* ---------- avatar + profile chip ---------- */
+.oc-av{width:32px;height:32px;border-radius:50%;background:var(--aurora);color:#fff;display:inline-grid;place-items:center;flex:none;overflow:hidden;font-family:var(--display);font-weight:800;font-size:.9rem;line-height:1;box-shadow:inset 0 -4px 8px rgba(0,0,0,.14)}
+.oc-av img{width:100%;height:100%;object-fit:cover}
+.oc-av.lg{width:46px;height:46px;font-size:1.1rem}
+.oc-av.sm{width:26px;height:26px;font-size:.75rem}
+
+.oc-who{position:relative;pointer-events:auto;display:flex;align-items:center}
+.oc-who-btn{padding:.3rem .9rem .3rem .3rem !important;gap:.5rem !important}
+.oc-who-name{font-family:var(--display);font-weight:700;font-size:.88rem;max-width:9ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.oc-who-menu{position:absolute;right:0;top:calc(100% + .6rem);width:min(300px,calc(100vw - 2rem));padding:1.1rem;border-radius:26px;background:rgba(255,255,255,.94);backdrop-filter:blur(22px) saturate(1.5);-webkit-backdrop-filter:blur(22px) saturate(1.5);border:1px solid rgba(255,255,255,.95);box-shadow:var(--shadow-lg);display:flex;flex-direction:column;gap:.8rem;opacity:0;transform:translateY(-8px) scale(.98);transform-origin:100% 0;pointer-events:none;transition:opacity .2s,transform .25s cubic-bezier(.2,.8,.2,1)}
+.oc-who.open .oc-who-menu{opacity:1;transform:none;pointer-events:auto}
+.oc-who-h{font-size:.68rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.oc-person{display:flex;align-items:center;gap:.75rem}
+.oc-person-t{display:flex;flex-direction:column;line-height:1.25;min-width:0}
+.oc-person-t b{font-family:var(--display);font-weight:800;letter-spacing:-.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.oc-person-t small{color:var(--muted);font-size:.78rem}
+.oc-who-days{padding:.6rem .9rem;border-radius:16px;background:var(--rose-s);color:var(--rose-d);font-weight:700;font-size:.85rem;text-align:center}
+.oc-who-out{width:100%}
+@media (max-width:760px){.oc-who-name{display:none}.oc-who-btn{padding:.3rem !important}}
+
+/* the profile chip on the Bloom page floats in the corner */
+.oc-who.fixed{position:fixed;z-index:60;right:1rem;top:max(1rem,env(safe-area-inset-top))}
+
+/* menu sheet: let it scroll on short screens */
+.sheet{overflow-y:auto}
+
+/* ---------- shared page frame ---------- */
+.oc-page{width:min(var(--maxw),100% - 2.4rem);margin-inline:auto;padding-top:clamp(5.6rem,10vw,7rem);padding-bottom:2rem}
+.oc-head{display:flex;flex-direction:column;gap:.7rem;margin-bottom:1.2rem}
+.oc-title{font-family:var(--display);font-weight:800;font-size:clamp(2.6rem,8vw,5rem);line-height:.9;letter-spacing:-.05em}
+.oc-title em{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:-.02em;background:var(--aurora);-webkit-background-clip:text;background-clip:text;color:transparent;padding-right:.08em}
+.oc-glass{background:var(--glass);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border:1px solid rgba(255,255,255,.95);box-shadow:var(--shadow)}
+
+/* toast */
+#oc-toast{position:fixed;left:50%;bottom:calc(6.5rem + var(--safe-b));translate:-50% 20px;z-index:200;padding:.7rem 1.2rem;border-radius:999px;background:var(--ink);color:#fff;font-weight:600;font-size:.9rem;opacity:0;pointer-events:none;transition:opacity .25s,translate .3s;max-width:calc(100vw - 2rem);text-align:center}
+#oc-toast.on{opacity:1;translate:-50% 0}
+@media (min-width:761px){#oc-toast{bottom:2rem}}
+
+/* ---------- chat ---------- */
+.oc-chat{display:flex;flex-direction:column;max-width:760px;margin-inline:auto;height:calc(100svh - 12.5rem);min-height:420px;border-radius:var(--r);overflow:hidden}
+@media (max-width:760px){.oc-chat{height:calc(100svh - 14.2rem - var(--safe-b))}}
+.oc-chat-top{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.9rem 1.2rem;border-bottom:1px solid var(--line)}
+.oc-chat-with{display:flex;align-items:center;gap:.7rem;min-width:0}
+.oc-chat-with b{font-family:var(--display);font-weight:800;letter-spacing:-.03em;font-size:1.15rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.oc-live{display:inline-flex;align-items:center;gap:.45rem;font-size:.72rem;font-weight:700;color:var(--muted);white-space:nowrap}
+.oc-live i{width:8px;height:8px;border-radius:50%;background:#c9c4d4}
+.oc-live.on i{background:var(--mint-d);box-shadow:0 0 0 4px rgba(31,167,99,.18)}
+.oc-log{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:1rem 1.1rem;display:flex;flex-direction:column;gap:.3rem}
+.oc-day{align-self:center;margin:.7rem 0 .4rem;padding:.25rem .8rem;border-radius:999px;background:var(--soft);font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.oc-row{display:flex;align-items:flex-end;gap:.5rem}
+.oc-row.me{flex-direction:row-reverse}
+.oc-row .oc-av{visibility:hidden}
+.oc-row.first .oc-av{visibility:visible}
+.oc-row.first{margin-top:.45rem}
+.oc-msg{max-width:min(78%,440px);padding:.55rem .95rem .45rem;border-radius:22px;background:#fff;border:1px solid var(--line);overflow-wrap:anywhere;white-space:pre-wrap;animation:oc-in .3s cubic-bezier(.2,1.2,.4,1)}
+@keyframes oc-in{from{opacity:0;transform:translateY(8px) scale(.97)}}
+.oc-row.them .oc-msg{border-bottom-left-radius:8px}
+.oc-row.me .oc-msg{background:var(--aurora);color:#fff;border-color:transparent;border-bottom-right-radius:8px;box-shadow:0 12px 26px -14px rgba(255,61,127,.7)}
+.oc-msg small{display:block;margin-top:.1rem;font-size:.64rem;opacity:.6;text-align:right;line-height:1.3;white-space:nowrap}
+.oc-msg.big{font-size:2.2rem;line-height:1.15;background:none;border:0;box-shadow:none;padding:.1rem .4rem}
+.oc-row.me .oc-msg.big{background:none;box-shadow:none}
+.oc-empty{margin:auto;text-align:center;color:var(--muted);padding:1rem}
+.oc-empty b{display:block;font-size:2.6rem;margin-bottom:.3rem}
+.oc-form{display:flex;gap:.5rem;padding:.75rem;border-top:1px solid var(--line);background:rgba(255,255,255,.65)}
+.oc-form input{flex:1;min-width:0;padding:.85rem 1.2rem;border-radius:999px;border:1.5px solid var(--line);background:#fff;font:inherit;outline:none;transition:border-color .2s,box-shadow .2s}
+.oc-form input:focus{border-color:var(--rose);box-shadow:0 0 0 5px rgba(255,61,127,.14)}
+
+/* ---------- together (lobby extras) ---------- */
+.oc-open{display:flex;flex-direction:column;gap:.7rem;margin-top:.5rem}
+.oc-open h3{font-family:var(--display);font-weight:800;letter-spacing:-.04em;font-size:1.6rem}
+.oc-room{display:flex;align-items:center;gap:.9rem;padding:.9rem 1.1rem;border-radius:22px;background:#fff;border:1px solid var(--line);box-shadow:var(--shadow)}
+.oc-room .ico{font-size:1.9rem;line-height:1}
+.oc-room .t{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.3}
+.oc-room .t b{font-family:var(--display);font-weight:800;letter-spacing:-.03em}
+.oc-room .t small{color:var(--muted)}
+.oc-room .go{display:flex;gap:.4rem}
+.oc-none{color:var(--muted);padding:.4rem .2rem}
+.oc-me-pill{display:inline-flex;align-items:center;gap:.45rem}
+
+/* ---------- connect four ---------- */
+.oc-c4{display:grid;grid-template-columns:repeat(7,1fr);gap:clamp(.25rem,1.4vw,.5rem);width:min(430px,100%);padding:clamp(.5rem,2vw,.9rem);border-radius:26px;background:linear-gradient(145deg,#ffd3e1,#e3d8ff);box-shadow:inset 0 -6px 14px rgba(0,0,0,.08),0 18px 36px -20px rgba(123,92,255,.5);touch-action:manipulation}
+.oc-col{display:grid;grid-template-rows:repeat(6,1fr);gap:clamp(.25rem,1.4vw,.5rem);padding:0;border-radius:999px;transition:background .2s}
+.oc-col:not(:disabled):hover{background:rgba(255,255,255,.4)}
+.oc-col:disabled{cursor:default}
+.oc-disc{aspect-ratio:1;border-radius:50%;background:#fff;box-shadow:inset 0 5px 8px rgba(18,15,28,.18)}
+.oc-disc.p0{background:radial-gradient(circle at 32% 28%,#ff9ab9,var(--rose) 60%);box-shadow:inset 0 -5px 8px rgba(0,0,0,.18),0 4px 6px -2px rgba(255,61,127,.5)}
+.oc-disc.p1{background:radial-gradient(circle at 32% 28%,#ffe9a8,#ffb91f 60%);box-shadow:inset 0 -5px 8px rgba(0,0,0,.14),0 4px 6px -2px rgba(227,155,0,.5)}
+.oc-disc.drop{animation:oc-drop .45s cubic-bezier(.3,1.3,.5,1)}
+.oc-disc.win{animation:pulse .8s ease-in-out 3;outline:3px solid #fff}
+@keyframes oc-drop{from{transform:translateY(-260%)}}
+
+/* tic tac toe + memory use the arcade's own .board .cell .mem .mc styles */
+.oc-mk0{color:var(--rose)}
+.oc-mk1{color:var(--lilac-d)}
+.mc.matched.by0 .back{background:var(--rose-s);border-color:#ffc2d6}
+.mc.matched.by1 .back{background:var(--lilac);border-color:#cdbfff}
+.mc.shown{transform:rotateY(180deg)}
+.mem.oc-lock .mc{pointer-events:none}
+.oc-turn{display:inline-flex;align-items:center;gap:.5rem}
+
+/* ---------- photos ---------- */
+.oc-ph-grid{columns:3 220px;column-gap:.9rem}
+.oc-ph{position:relative;break-inside:avoid;margin:0 0 .9rem;border-radius:22px;overflow:hidden;background:var(--soft);border:1px solid var(--line);box-shadow:var(--shadow);cursor:zoom-in;animation:oc-in .4s}
+.oc-ph img{width:100%;height:auto;display:block}
+.oc-ph .oc-x{position:absolute;right:.5rem;top:.5rem;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.9);display:none;place-items:center;font-size:.9rem;box-shadow:0 6px 14px -6px rgba(0,0,0,.4)}
+.oc-ph.mine:hover .oc-x,.oc-ph.mine:focus-within .oc-x{display:grid}
+@media (hover:none){.oc-ph.mine .oc-x{display:grid}}
+.oc-lightbox{position:fixed;inset:0;z-index:150;background:rgba(18,15,28,.86);display:flex;align-items:center;justify-content:center;padding:1rem;cursor:zoom-out;animation:fade .2s}
+.oc-lightbox img{max-width:100%;max-height:100%;border-radius:18px;box-shadow:0 30px 80px -20px rgba(0,0,0,.6)}
+.oc-up{position:relative;overflow:hidden}
+.oc-up input{position:absolute;inset:0;opacity:0;cursor:pointer;font-size:0}
+.oc-up.busy{opacity:.7;pointer-events:none}
+.oc-up-note{color:var(--muted);font-size:.88rem}
+.oc-up-err{color:var(--rose-d);font-weight:600}
+
+/* ---------- together: lobby + room ---------- */
+[hidden]{display:none !important}
+.oc-pick{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.9rem;margin-bottom:1.6rem}
+.oc-pick button{display:flex;flex-direction:column;align-items:flex-start;gap:.35rem;text-align:left;padding:1.2rem 1.3rem;border-radius:var(--r);background:var(--glass);border:1px solid rgba(255,255,255,.95);box-shadow:var(--shadow);transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s}
+.oc-pick button:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.oc-pick .ico{font-size:2.4rem;line-height:1}
+.oc-pick b{font-family:var(--display);font-weight:800;letter-spacing:-.04em;font-size:1.35rem}
+.oc-pick small{color:var(--muted);line-height:1.35}
+.oc-stagebox{max-width:620px;margin-inline:auto;padding:clamp(1rem,3vw,1.6rem);border-radius:var(--r);display:flex;flex-direction:column;align-items:center;gap:1.1rem}
+.oc-players{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center;width:100%}
+.oc-pl{display:flex;align-items:center;gap:.55rem;padding:.4rem .9rem .4rem .4rem;border-radius:999px;background:var(--soft);border:1.5px solid var(--line);font-weight:700;font-size:.9rem;transition:border-color .2s,background .2s}
+.oc-pl.turn{border-color:var(--rose);background:var(--rose-s)}
+.oc-pl i{font-style:normal;font-weight:800;font-size:1.05rem}
+.oc-pl b{font-family:var(--display);font-weight:800;min-width:1.2ch;text-align:center}
+.oc-banner{font-family:var(--display);font-weight:800;letter-spacing:-.03em;font-size:clamp(1.3rem,4.5vw,1.9rem);text-align:center;line-height:1.15}
+.oc-banner small{display:block;margin-top:.35rem;font-family:var(--sans);font-weight:500;letter-spacing:0;font-size:.9rem;color:var(--muted)}
+.oc-banner.you{background:var(--aurora);-webkit-background-clip:text;background-clip:text;color:transparent}
+.oc-stage{display:flex;justify-content:center;width:100%;min-height:120px}
+.oc-actions{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center}
+.oc-stage .mem{grid-template-columns:repeat(4,1fr)}
+.oc-stage .board.oc-wait,.oc-stage .oc-c4.oc-wait{opacity:.82}
+.oc-wait-card{padding:2rem 1rem;text-align:center;color:var(--muted)}
+.oc-wait-card b{display:block;font-size:2.8rem;margin-bottom:.4rem;animation:oc-bob 1.6s ease-in-out infinite}
+@keyframes oc-bob{50%{transform:translateY(-8px)}}
+
+/* ---------- chat section inside the home page ---------- */
+.col.c.wide{width:min(720px,100%)}
+.col.c.wide .sec-head{align-items:center;text-align:center;margin-bottom:1.4rem}
+.chat-card{display:flex;flex-direction:column;width:100%;height:min(560px,72svh);min-height:380px;border-radius:var(--r);overflow:hidden;text-align:left}
+.chat-top{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.85rem 1.2rem;border-bottom:1px solid var(--line)}
+.chat-with{display:flex;align-items:center;gap:.7rem;min-width:0}
+.chat-with b{font-family:var(--display);font-weight:800;letter-spacing:-.03em;font-size:1.15rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+a.pill-ui.has-new{position:relative}
+a.pill-ui.has-new::after{content:"";position:absolute;right:.5rem;top:.35rem;width:9px;height:9px;border-radius:50%;background:var(--rose);box-shadow:0 0 0 3px #fff}
+
+/* ---------- vault: edit button + panel ---------- */
+.vault-edit{position:absolute;z-index:6;left:max(1.4rem,calc((100vw - var(--maxw))/2));bottom:clamp(1.5rem,5vh,3rem);padding:.6rem 1.1rem !important;font-family:var(--display);font-weight:700;font-size:.88rem;cursor:pointer;color:var(--ink)}
+@media (max-width:900px){.vault-edit{left:1rem;bottom:5rem}}
+.vm{position:fixed;inset:0;z-index:180;background:rgba(18,15,28,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .25s}
+.vm.on{opacity:1;pointer-events:auto}
+.vm-box{width:min(640px,100%);max-height:min(720px,92svh);display:flex;flex-direction:column;gap:.9rem;padding:clamp(1.1rem,3vw,1.6rem);border-radius:var(--r);background:rgba(255,255,255,.97);box-shadow:var(--shadow-lg);transform:translateY(14px) scale(.98);transition:transform .3s cubic-bezier(.2,.9,.3,1.1)}
+.vm.on .vm-box{transform:none}
+.vm-head{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.vm-title{display:flex;flex-direction:column;gap:.3rem}
+.vm-title b{font-family:var(--display);font-weight:800;letter-spacing:-.04em;font-size:1.7rem;line-height:1}
+.vm-bar{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
+.vm-note{min-height:1.2em;font-size:.88rem;color:var(--muted);font-weight:600}
+.vm-note.bad{color:var(--rose-d)}
+.vm-list{overflow-y:auto;overscroll-behavior:contain;display:flex;flex-direction:column;gap:.55rem;padding-right:.2rem}
+.vm-item{display:flex;align-items:center;gap:.7rem;padding:.5rem;border-radius:18px;background:var(--soft);border:1px solid var(--line)}
+.vm-th{width:58px;height:58px;border-radius:12px;overflow:hidden;flex:none;background:var(--rose-s)}
+.vm-th img{width:100%;height:100%;object-fit:cover;display:block}
+.vm-cap{flex:1;min-width:0;padding:.7rem 1rem;border-radius:999px;border:1.5px solid var(--line);background:#fff;font:inherit;outline:none}
+.vm-cap:focus{border-color:var(--rose);box-shadow:0 0 0 4px rgba(255,61,127,.14)}
+.vm-del{width:42px;height:42px;border-radius:50%;background:#fff;border:1px solid var(--line);font-size:1rem;flex:none}
+.vm-del:hover{background:var(--rose-s)}
+.vm-empty{color:var(--muted);padding:1rem .3rem}
+
+/* ---------- two-player games inside the arcade ---------- */
+.mp-wrap{width:100%;max-width:640px;margin-inline:auto;display:flex;flex-direction:column;align-items:center;gap:1.1rem}
+.mp-start{display:flex;flex-direction:column;align-items:center;gap:.4rem;text-align:center}
+.mp-start p{color:var(--muted);max-width:34ch}
+.mp-list{width:100%;display:flex;flex-direction:column;gap:.6rem}
+.mp-list h4{font-family:var(--display);font-weight:800;letter-spacing:-.03em;font-size:1.15rem;text-align:left}
+.mp-invites{margin:1.1rem auto 0;width:min(var(--maxw),100% - 2.4rem);display:flex;flex-direction:column;gap:.6rem}
+.mp-invites:empty{display:none}
+.mp-invite{display:flex;align-items:center;gap:.9rem;padding:.8rem 1.1rem;border-radius:22px;background:var(--aurora);color:#fff;box-shadow:0 14px 30px -14px rgba(255,61,127,.7);animation:oc-in .4s}
+.mp-invite .t{flex:1;min-width:0;font-weight:700;line-height:1.3}
+.mp-invite .btn{background:#fff;color:var(--rose-d);box-shadow:none}
